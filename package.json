@@ -1,0 +1,34 @@
+{
+  "name": "ascpderj",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@chakra-ui/react": "^1.8.3",
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11",
+    "firebase": "^9.6.7",
+    "framer-motion": "^6",
+    "next": "12.1.0",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-icons": "^4.3.1",
+    "react-table": "^7.7.0",
+    "styled-components": "^5.3.3"
+  },
+  "devDependencies": {
+    "@types/firebase": "^3.2.1",
+    "@types/node": "17.0.18",
+    "@types/react": "17.0.39",
+    "@types/react-table": "^7.7.9",
+    "@types/styled-components": "^5.1.23",
+    "eslint": "8.9.0",
+    "eslint-config-next": "12.1.0",
+    "typescript": "4.5.5"
+  }
+}
