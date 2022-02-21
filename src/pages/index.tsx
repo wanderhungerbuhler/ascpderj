@@ -22,8 +22,8 @@ export default function Home() {
   useEffect(() => {
     const auth = getAuth(app);
 
-    onAuthStateChanged(auth, user => {
-      setUser(user);
+    onAuthStateChanged(auth, currentUser => {
+      setUser(currentUser);
     });
   }, []);
 
@@ -42,7 +42,7 @@ export default function Home() {
   }
 
   if (user) {
-    router.push('/dashboard')
+    router.push('/dashboard');
   }
 
   return (

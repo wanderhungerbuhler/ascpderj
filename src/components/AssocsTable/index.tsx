@@ -1,4 +1,4 @@
-import { Container } from "./styles";
+import { Container } from "@/styles/components/AssocsTable/style";
 import {
   Table,
   Thead,
@@ -35,38 +35,39 @@ interface DataProps {
 }
 
 export function AssocsTable({ dataProps }: DataProps) {
-
   return (
-    <Container>
-      <Table>
-        <TableCaption>Relatório de Associados ASCPDERJ</TableCaption>
-        <Thead>
-          <Tr>
-            <Th>Id Funcional</Th>
-            <Th>Nome</Th>
-            <Th>Cat. Assoc.</Th>
-            <Th>Matrícula</Th>
-            <Th></Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-
-          {dataProps?.map(d => (
-            <Tr key={d.id}>
-              <Td>{d.idFuncional}</Td>
-              <Td>{d.nomeServidor}</Td>
-              <Td>{d.catAssoc}</Td>
-              <Td>{d.matricula}</Td>
-              <Td style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-                <RiEditLine size={17} style={{ cursor: 'pointer' }} />
-                <VscFilePdf size={17} style={{ cursor: 'pointer' }} />
-              </Td>
+    <>
+      <Container>
+        <Table variant='simple' colorScheme='facebook'>
+          <TableCaption>Relatório de Associados ASCPDERJ</TableCaption>
+          <Thead>
+            <Tr>
+              <Th>Id Funcional</Th>
+              <Th>Nome</Th>
+              <Th>Cat. Assoc.</Th>
+              <Th>Matrícula</Th>
+              <Th></Th>
             </Tr>
-          ))}
+          </Thead>
+          <Tbody>
 
-        </Tbody>
-      </Table>
-    </Container>
+            {dataProps?.map(d => (
+              <Tr key={d.id}>
+                <Td>{d.idFuncional}</Td>
+                <Td>{d.nomeServidor}</Td>
+                <Td>{d.catAssoc}</Td>
+                <Td>{d.matricula}</Td>
+                <Td>
+                  <RiEditLine size={20} style={{ cursor: 'pointer' }} />
+                  <VscFilePdf size={20} style={{ cursor: 'pointer' }} />
+                </Td>
+              </Tr>
+            ))}
+
+          </Tbody>
+        </Table>
+      </Container>
+    </>
   )
 }
 
