@@ -15,34 +15,34 @@ interface User {
 
 export default function Home() {
   const router = useRouter();
-
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   useEffect(() => {
     const auth = getAuth(app);
 
-    const subscriber = onAuthStateChanged(auth, userInfo => {
-      setUser(userInfo);
+    onAuthStateChanged(auth, user => {
+      setUser(user);
     });
-
-    return subscriber;
   }, []);
 
-  function signIn(e: FormEvent) {
+  async function signIn(e: FormEvent) {
     e.preventDefault();
 
     const auth = getAuth(app);
-    signInWithEmailAndPassword(auth, email, password)
-      .then(response => {
-        console.log(response.user.email)
-      })
+    signInWithEmailAndPassword(auth, email, password);
+
     setPersistence(auth, browserLocalPersistence)
+      .then(() => {
+        return signInWithEmailAndPassword(auth, email, password);
+      }).catch((error) => {
+        console.log(error.code, error.message);
+      });
   }
 
   if (user) {
-    router.push('/dashboard');
+    router.push('/dashboard')
   }
 
   return (

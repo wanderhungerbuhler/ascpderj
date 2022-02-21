@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  width: 100%;
-  height: 100vh;
 
   table {
     width: 100%;
@@ -21,14 +19,8 @@ export const Container = styled.div`
       border: 0;
       background: #e0e0e0;
       color: #0e3355;
-      border-radius: 0.25rem;
+      font-size: .8em;
+      border-radius: 0;
     }
   }
-`;
-
-export const Content = styled.div`
-  max-width: 980px;
-  width: 100%;
-  height: 700px;
-  margin: 70px auto;
 `;
