@@ -89,10 +89,7 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
       usuario: user?.email,
     });
 
-    setTimeout(() => {
-      onRequestClose();
-      setIDFuncional('');
-    }, 1500);
+    onRequestClose();
   }
 
   return (
