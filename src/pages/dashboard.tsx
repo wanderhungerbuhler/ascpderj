@@ -1,12 +1,13 @@
-import React from 'react';
-import { GetStaticProps } from 'next';
+import React, { useContext, useEffect } from 'react';
+import { GetServerSideProps, GetStaticProps } from 'next';
 import app from '../../services/firebaseConfig';
-import { getFirestore, collection, getDocs, query, limit, orderBy } from "firebase/firestore";
+import { getFirestore, collection, getDocs, query, limit, orderBy, onSnapshot } from "firebase/firestore";
 
 import { Container, Content } from '@/styles/pages/Dashboard/styles';
 
 import { Menu } from '@/components/Menu';
 import { AssocsTable } from '@/components/AssocsTable';
+import { AuthContext } from '@/hooks/authContext';
 
 interface OrderProps {
   id: string;
@@ -31,25 +32,26 @@ interface DataProps {
 }
 
 export default function Dashboard({ data }: DataProps) {
+  const { user } = useContext(AuthContext);
+
   return (
     <Container>
       <Menu />
-
       <Content>
-        <AssocsTable dataProps={data} />
+        {user && <AssocsTable dataProps={data} />}
       </Content>
     </Container >
   )
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const db = getFirestore(app);
 
-  const data = await getDocs(query(collection(db, "users"), orderBy("nomeServidor"), limit(20)))
+  const data = await getDocs(query(collection(db, "users"), orderBy("nomeServidor"), limit(2)))
     .then(response => response.docs.map(doc => {
       return {
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       }
     }) as OrderProps[])
     .catch(error => {
@@ -60,8 +62,6 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {
       data,
     },
-    revalidate: 60 * 60 * 24
   }
 }
-
 

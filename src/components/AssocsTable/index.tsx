@@ -11,6 +11,8 @@ import {
 
 import { VscFilePdf } from 'react-icons/vsc';
 import { RiEditLine } from 'react-icons/ri';
+import { NewTransactionModal } from "../NewTransactionModal";
+import { useState } from "react";
 
 interface OrderProps {
   id: string;
@@ -31,13 +33,28 @@ interface OrderProps {
 }
 
 interface DataProps {
-  dataProps: OrderProps[];
+  dataProps: OrderProps[] | null;
 }
 
 export function AssocsTable({ dataProps }: DataProps) {
+  const [dd, setDD] = useState<OrderProps | null>(null);
+  const [isNewTransactionModal, setIsNewTransactionModal] = useState(false);
+
+  function handleOpenNewTransactionModal(d: OrderProps) {
+    setIsNewTransactionModal(true);
+    setDD(d);
+  }
+
+  function handleCloseNewTransactionModal() {
+    setIsNewTransactionModal(false);
+  }
+
   return (
     <>
       <Container>
+
+        <NewTransactionModal data={dd} isOpen={isNewTransactionModal} onRequestClose={handleCloseNewTransactionModal} />
+
         <Table variant='simple' colorScheme='facebook'>
           <TableCaption>Relatório de Associados ASCPDERJ</TableCaption>
           <Thead>
@@ -58,7 +75,7 @@ export function AssocsTable({ dataProps }: DataProps) {
                 <Td>{d.catAssoc}</Td>
                 <Td>{d.matricula}</Td>
                 <Td>
-                  <RiEditLine size={20} style={{ cursor: 'pointer' }} />
+                  <RiEditLine size={20} style={{ cursor: 'pointer' }} onClick={() => handleOpenNewTransactionModal(d)} />
                   <VscFilePdf size={20} style={{ cursor: 'pointer' }} />
                 </Td>
               </Tr>
