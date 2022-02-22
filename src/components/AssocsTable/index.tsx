@@ -36,7 +36,7 @@ interface DataProps {
   dataProps: OrderProps[] | null;
 }
 
-export function AssocsTable({ dataProps }: DataProps) {
+export function AssocsTable({ dataProps, ...rest }: DataProps) {
   const [dd, setDD] = useState<OrderProps | null>(null);
   const [isNewTransactionModal, setIsNewTransactionModal] = useState(false);
 
@@ -51,7 +51,7 @@ export function AssocsTable({ dataProps }: DataProps) {
 
   return (
     <>
-      <Container>
+      <Container {...rest}>
 
         <NewTransactionModal data={dd} isOpen={isNewTransactionModal} onRequestClose={handleCloseNewTransactionModal} />
 

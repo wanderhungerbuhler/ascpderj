@@ -1,7 +1,7 @@
-import { createContext, ReactNode, useEffect, useState, FormEvent } from "react";
+import { createContext, ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import app from '../../services/firebaseConfig';
-import { getAuth, signOut, onAuthStateChanged } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 import { collection, getFirestore, limit, onSnapshot, orderBy, query } from "firebase/firestore";
 
 interface AuthProvider {

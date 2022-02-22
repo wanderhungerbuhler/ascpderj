@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 export const Container = styled.form`
+
   h2 {
     color: #0e3355;
     font-size: 1.5rem;
@@ -9,9 +10,10 @@ export const Container = styled.form`
   }
 
   input {
-    padding: 0 1.5rem;
-    margin: 0 1.5rem;
-    height: 4rem;
+    width: auto;
+    padding: 0 1rem;
+    margin: 0 5px;
+    height: 3rem;
     border-radius: 0.25rem;
 
     border: 1px solid #e0e0e0;
@@ -27,9 +29,9 @@ export const Container = styled.form`
   }
 
   button[type="submit"] {
-    width: 100%;
+    width: 50%;
     padding: 0 1.5rem;
-    height: 4rem;
+    height: 3rem;
     background: #0087eb;
     color: #FFFFFF;
     border: 0;
