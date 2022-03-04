@@ -102,6 +102,7 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
       <Flex
         as="form"
         width="100%"
+        bg="gray.800"
         p="8"
         borderRadius={8}
         flexDir="row"
