@@ -11,6 +11,7 @@ interface AuthProvider {
 interface User {
   uid: string;
   email: string;
+  photoURL: string;
 }
 
 interface OrderProps {
@@ -32,7 +33,7 @@ interface OrderProps {
 }
 
 interface AuthContextDate {
-  logOUt(): Promise<void>;
+  logOut(): Promise<void>;
   isAuthenticated: boolean;
   user: User | null;
   tV: OrderProps[] | null;
@@ -49,7 +50,7 @@ export function AuthProvider({ children }: AuthProvider) {
 
   useEffect(() => {
     const db = getFirestore(app)
-    onSnapshot(query(collection(db, "users"), orderBy("nomeServidor"), limit(25)), snap => {
+    onSnapshot(query(collection(db, "associates"), orderBy("nomeServidor"), limit(25)), snap => {
       const data = snap.docs.map(doc => {
         return {
           id: doc.id,
@@ -63,23 +64,19 @@ export function AuthProvider({ children }: AuthProvider) {
       setUser(user as any);
     });
 
-    if (user) {
-      router.push('/dashboard');
-    } else {
-      router.push('/', '/');
-    }
+    { user ? router.push('/dashboard') : router.push('/') }
 
     return subscriber;
 
   }, [user]);
 
-  async function logOUt() {
+  async function logOut() {
     getAuth(app).signOut();
     router.push('/');
   }
 
   return (
-    <AuthContext.Provider value={{ user, logOUt, tV, isAuthenticated }}>
+    <AuthContext.Provider value={{ user, logOut, tV, isAuthenticated }}>
       {children}
     </AuthContext.Provider>
   )

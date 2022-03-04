@@ -20,7 +20,7 @@ export const Container = styled.div`
       /* padding: 1rem 2rem; */
       border: 0;
       background: transparent !important;
-      color: #0e3355;
+      color: #FFF;
       /* border-radius: 0.25rem; */
     }
   }
@@ -33,7 +33,7 @@ export const Content = styled.div`
   margin: 70px auto;
 
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
   flex-wrap: wrap;
 `;
@@ -45,7 +45,7 @@ export const Search = styled.input`
   border-spacing: 0 0.5rem;
   border-radius: 0.25rem;
   border: 1px solid #e0e0e0;
-  color: #0e3355;
+  color: #FFF;
   font-weight: 600;
 `;
 

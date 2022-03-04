@@ -1,17 +1,19 @@
-import { AuthProvider } from '@/hooks/authContext';
-import GlobalStyles from '@/styles/globalStyles';
-import { ChakraProvider } from '@chakra-ui/react';
-
 import type { AppProps } from 'next/app';
+
+import { ChakraProvider } from '@chakra-ui/react';
+import { AuthProvider } from '@/hooks/authContext';
+
+import { theme } from '@/styles/theme';
+import GlobalStyles from '@/styles/globalStyles';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <AuthProvider>
-      <ChakraProvider>
-        <GlobalStyles />
+    <ChakraProvider theme={theme}>
+      <AuthProvider>
         <Component {...pageProps} />
-      </ChakraProvider>
-    </AuthProvider>
+        <GlobalStyles />
+      </AuthProvider>
+    </ChakraProvider>
   )
 }
 

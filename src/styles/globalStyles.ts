@@ -1,14 +1,14 @@
 import { createGlobalStyle } from 'styled-components';
 
 export default createGlobalStyle`
-  * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
+  /* * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
   body {
     background: #FFFFFF;
   }
   body, input, button, select, option {
     font-family: 'Montserrat', sans-serif;
     -webkit-font-smoothing: antialiased;
-  }
+  } */
 
   .react-modal-overlay {
     background: rgba(0, 0, 0, 0.5);
@@ -27,9 +27,15 @@ export default createGlobalStyle`
   .react-modal-content {
     width: 100%;
     max-width: 980px;
-    background: #FFFFFF;
-    padding: 3rem;
+    padding: 0;
     position: relative;
     border-radius: 0.25rem;
+
   }
+
+  .boLHFp table td {
+    border: 0;
+    background: transparent !important;
+    color: #FFF;
+}
 `;

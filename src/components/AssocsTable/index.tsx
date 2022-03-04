@@ -1,4 +1,7 @@
-import { Container } from "@/styles/components/AssocsTable/style";
+import { useState } from "react";
+import { deleteDoc, doc, getFirestore } from 'firebase/firestore';
+
+import { Flex, FormControl, IconButton } from '@chakra-ui/react';
 import {
   Table,
   Thead,
@@ -6,13 +9,20 @@ import {
   Tr,
   Th,
   Td,
-  TableCaption
+  TableCaption,
+  Box,
+  Text,
+  Button,
+  Icon
 } from '@chakra-ui/react';
 
 import { VscFilePdf } from 'react-icons/vsc';
-import { RiEditLine } from 'react-icons/ri';
+import { RiEditLine, RiDeleteBin7Line, RiPencilLine } from 'react-icons/ri';
 import { NewTransactionModal } from "../NewTransactionModal";
-import { useState } from "react";
+
+import { Container } from "@/styles/components/AssocsTable/style";
+import app from "@/../services/firebaseConfig";
+import { useRouter } from "next/router";
 
 interface OrderProps {
   id: string;
@@ -36,7 +46,7 @@ interface DataProps {
   dataProps: OrderProps[] | null;
 }
 
-export function AssocsTable({ dataProps, ...rest }: DataProps) {
+export function AssocsTable({ dataProps }: DataProps) {
   const [dd, setDD] = useState<OrderProps | null>(null);
   const [isNewTransactionModal, setIsNewTransactionModal] = useState(false);
 
@@ -49,41 +59,106 @@ export function AssocsTable({ dataProps, ...rest }: DataProps) {
     setIsNewTransactionModal(false);
   }
 
+  async function handleDelete(d: OrderProps) {
+    const db = getFirestore(app);
+    const deleteUsers = doc(db, "associates", `${d.id}`);
+
+    window.confirm("Deseja realmente excluir?") ? await deleteDoc(deleteUsers) : '';
+  }
+
   return (
     <>
-      <Container {...rest}>
+      <NewTransactionModal data={dd} isOpen={isNewTransactionModal} onRequestClose={handleCloseNewTransactionModal} />
 
-        <NewTransactionModal data={dd} isOpen={isNewTransactionModal} onRequestClose={handleCloseNewTransactionModal} />
-
-        <Table variant='simple' colorScheme='facebook'>
-          <TableCaption>Relatório de Associados ASCPDERJ</TableCaption>
-          <Thead>
-            <Tr>
-              <Th>Id Funcional</Th>
-              <Th>Nome</Th>
-              <Th>Cat. Assoc.</Th>
-              <Th>Matrícula</Th>
-              <Th></Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-
-            {dataProps?.map(d => (
-              <Tr key={d.id}>
-                <Td>{d.idFuncional}</Td>
-                <Td>{d.nomeServidor}</Td>
-                <Td>{d.catAssoc}</Td>
-                <Td>{d.matricula}</Td>
-                <Td>
-                  <RiEditLine size={20} style={{ cursor: 'pointer' }} onClick={() => handleOpenNewTransactionModal(d)} />
-                  <VscFilePdf size={20} style={{ cursor: 'pointer' }} />
-                </Td>
+      <Flex width="100%" maxWidth={980} mx="auto">
+        <Box flex="1" borderRadius="8" bg="gray.800" p="7" mt="7" mx="auto" mb="70">
+          <Table w="100%" variant="simple" colorScheme="whiteAlpha">
+            <TableCaption placement="bottom">Relatório de Associados ASCPDERJ</TableCaption>
+            <Thead>
+              <Tr>
+                <Th>Id Funcional</Th>
+                <Th>Nome</Th>
+                <Th>Cat. Assoc.</Th>
+                <Th>Matrícula</Th>
+                <Th></Th>
               </Tr>
-            ))}
+            </Thead>
+            <Tbody>
 
-          </Tbody>
-        </Table>
-      </Container>
+              {dataProps?.map(d => (
+                <Tr key={d.id}>
+                  <Td>
+                    <Box>
+                      <Text fontSize="sm">{d.idFuncional}</Text>
+                    </Box>
+                  </Td>
+
+                  <Td>
+                    <Box>
+                      <Text fontWeight="bold" fontSize="sm">{d.nomeServidor}</Text>
+                    </Box>
+                  </Td>
+
+                  <Td>
+                    <Box>
+                      <Text fontSize="sm">{d.catAssoc}</Text>
+                    </Box>
+                  </Td>
+
+                  <Td>
+                    <Box>
+                      <Text fontSize="sm">{d.matricula}</Text>
+                    </Box>
+                  </Td>
+
+                  <Td>
+                    <IconButton
+                      aria-label='Update Associates'
+                      as="button"
+                      size="xs"
+                      mr="1"
+                      fontSize="sm"
+                      bg="0"
+                      color="gray.50"
+                      icon={<RiPencilLine fontSize={17} />}
+                      cursor="pointer"
+                      outline="none"
+                      _focus={{
+                        outline: "none"
+                      }}
+                      _hover={{
+                        bg: "gray.700"
+                      }}
+                      onClick={() => handleOpenNewTransactionModal(d)}
+                    />
+
+                    <IconButton
+                      aria-label='Delete Associates'
+                      as="button"
+                      size="xs"
+                      mr="1"
+                      fontSize="sm"
+                      bg="0"
+                      color="red"
+                      icon={<RiDeleteBin7Line fontSize={17} />}
+                      cursor="pointer"
+                      outline="none"
+                      _focus={{
+                        outline: "none"
+                      }}
+                      _hover={{
+                        bg: "gray.700"
+                      }}
+                      onClick={() => handleDelete(d)}
+                    >Atualizar</IconButton>
+                  </Td>
+                </Tr>
+              ))}
+
+            </Tbody>
+          </Table>
+        </Box>
+      </Flex>
     </>
   )
 }
