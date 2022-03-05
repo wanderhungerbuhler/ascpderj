@@ -1,6 +1,6 @@
 import app from "@/../services/firebaseConfig";
-import { collection, doc, getFirestore, onSnapshot, onSnapshotsInSync, serverTimestamp, where, updateDoc } from "firebase/firestore";
-import { FormEvent, useContext, useRef, useState } from "react";
+import { doc, getFirestore, updateDoc } from "firebase/firestore";
+import { FormEvent, useContext, useState } from "react";
 import Modal from 'react-modal';
 import { AuthContext } from '@/hooks/authContext';
 
@@ -28,10 +28,9 @@ interface NewTransactionModalProps {
   data: OrderProps | null;
 }
 
-import { Container } from './styles';
-import { Box, Button, Flex, Heading, IconButton } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading } from "@chakra-ui/react";
 import { Input } from "../Form/Input";
-import { RiDeleteBin2Line, RiSave2Fill } from "react-icons/ri";
+import { RiSave2Fill } from "react-icons/ri";
 
 export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransactionModalProps) {
   const [idFuncional, setIDFuncional] = useState('');

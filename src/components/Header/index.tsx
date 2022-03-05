@@ -1,10 +1,7 @@
 import React, { useContext } from 'react';
-import { Avatar, Box, Button, Flex, HStack, Icon, IconButton } from '@chakra-ui/react';
-
+import { Avatar, Box, Button, Flex, HStack } from '@chakra-ui/react';
 
 import Image from 'next/image';
-
-import { GrPowerShutdown } from 'react-icons/gr';
 
 import logoSvg from '@/assets/logo.svg';
 import { AuthContext } from '@/hooks/authContext';

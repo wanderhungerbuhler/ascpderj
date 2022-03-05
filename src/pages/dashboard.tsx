@@ -1,5 +1,5 @@
-import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
-import { Flex, Input, Icon, Box, Select } from '@chakra-ui/react';
+import React, { useContext, useEffect, useState } from 'react';
+import { Flex, Input, Icon, Select } from '@chakra-ui/react';
 import { RiSearchLine } from 'react-icons/ri';
 
 import { Header } from '@/components/Header';
