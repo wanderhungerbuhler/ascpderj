@@ -7,7 +7,7 @@ import { AssocsTable } from '@/components/AssocsTable';
 import { AuthContext } from '@/hooks/authContext';
 
 import app from '../../services/firebaseConfig';
-import { getFirestore, onSnapshot, query, collection, orderBy, limit, where } from 'firebase/firestore';
+import { getFirestore, onSnapshot, query, collection, orderBy, limit, where, Firestore, startAt, endAt } from 'firebase/firestore';
 
 interface OrderProps {
   id: string;
@@ -35,20 +35,21 @@ export default function Dashboard() {
 
   const [resultSearch, setResultSearch] = useState<OrderProps[] | null>(null);
 
-  console.log(listPageSearchSelected);
+  const formatedSearch = search.toLocaleUpperCase().trim();
 
   useEffect(() => {
-    const db = getFirestore(app)
-    onSnapshot(query(collection(db, "associates"), where("nomeServidor", ">=", `${search}`), orderBy("nomeServidor", "asc"), limit(listPageSearchSelected)), snap => {
-      const data = snap.docs.map(doc => {
-        return {
-          id: doc.id,
-          ...doc.data()
-        }
+    const db = getFirestore(app);
+    onSnapshot(query(collection(db, "associates"), where("nomeServidor", ">=", `${formatedSearch}`),
+      orderBy("nomeServidor", "asc"), startAt(formatedSearch), endAt(`${formatedSearch}\uf8ff`), limit(listPageSearchSelected)), snap => {
+        const data = snap.docs.map(doc => {
+          return {
+            id: doc.id,
+            ...doc.data()
+          }
+        })
+        setResultSearch(data as any);
       })
-      setResultSearch(data as any);
-    })
-  }, [search, listPageSearchSelected])
+  }, [formatedSearch, listPageSearchSelected])
 
   return (
     <>
