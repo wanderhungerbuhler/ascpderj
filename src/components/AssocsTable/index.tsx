@@ -17,10 +17,9 @@ import {
 } from '@chakra-ui/react';
 
 import { VscFilePdf } from 'react-icons/vsc';
-import { RiEditLine, RiDeleteBin7Line, RiPencilLine } from 'react-icons/ri';
+import { RiDeleteBin7Line, RiPencilLine } from 'react-icons/ri';
 import { NewTransactionModal } from "../NewTransactionModal";
 
-import { Container } from "@/styles/components/AssocsTable/style";
 import app from "@/../services/firebaseConfig";
 import { useRouter } from "next/router";
 
@@ -49,6 +48,9 @@ interface DataProps {
 export function AssocsTable({ dataProps }: DataProps) {
   const [dd, setDD] = useState<OrderProps | null>(null);
   const [isNewTransactionModal, setIsNewTransactionModal] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const router = useRouter();
 
   function handleOpenNewTransactionModal(d: OrderProps) {
     setIsNewTransactionModal(true);
@@ -57,6 +59,11 @@ export function AssocsTable({ dataProps }: DataProps) {
 
   function handleCloseNewTransactionModal() {
     setIsNewTransactionModal(false);
+  }
+
+  function handleOpenPDF(d: OrderProps) {
+    setIsOpen(true);
+    router.push(`/dashboard/${d?.id}`)
   }
 
   async function handleDelete(d: OrderProps) {
@@ -130,6 +137,26 @@ export function AssocsTable({ dataProps }: DataProps) {
                         bg: "gray.700"
                       }}
                       onClick={() => handleOpenNewTransactionModal(d)}
+                    />
+
+                    <IconButton
+                      aria-label='Open PDF Associated'
+                      as="button"
+                      size="xs"
+                      mr="1"
+                      fontSize="sm"
+                      bg="0"
+                      color="gray.50"
+                      icon={<VscFilePdf fontSize={17} />}
+                      cursor="pointer"
+                      outline="none"
+                      _focus={{
+                        outline: "none"
+                      }}
+                      _hover={{
+                        bg: "gray.700"
+                      }}
+                      onClick={() => handleOpenPDF(d)}
                     />
 
                     <IconButton
