@@ -26,10 +26,14 @@ export default createGlobalStyle`
 
   .react-modal-content {
     width: 100%;
+    height: 560px;
     max-width: 980px;
     padding: 0;
     position: relative;
     border-radius: 0.25rem;
+
+    outline: none;
+    overflow-y:scroll ;
 
   }
 
@@ -37,5 +41,5 @@ export default createGlobalStyle`
     border: 0;
     background: transparent !important;
     color: #FFF;
-}
+  }
 `;

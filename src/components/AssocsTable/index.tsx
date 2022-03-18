@@ -86,6 +86,7 @@ export function AssocsTable({ dataProps }: DataProps) {
                 <Th>Id Funcional</Th>
                 <Th>Nome</Th>
                 <Th>Cat. Assoc.</Th>
+                <Th>Cargo</Th>
                 <Th>Matrícula</Th>
                 <Th></Th>
               </Tr>
@@ -109,6 +110,12 @@ export function AssocsTable({ dataProps }: DataProps) {
                   <Td>
                     <Box>
                       <Text fontSize="sm">{d.catAssoc}</Text>
+                    </Box>
+                  </Td>
+
+                  <Td>
+                    <Box>
+                      <Text fontSize="sm">{d.cargo}</Text>
                     </Box>
                   </Td>
 

@@ -28,7 +28,7 @@ interface NewTransactionModalProps {
   data: OrderProps | null;
 }
 
-import { Box, Button, Flex, Heading } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, Select } from "@chakra-ui/react";
 import { Input } from "../Form/Input";
 import { RiSave2Fill } from "react-icons/ri";
 
@@ -116,13 +116,69 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
           <Input name="nomeServidor" label="Nome Completo" placeholder="Nome Completo" defaultValue={data?.nomeServidor} onChange={e => setNomeServidor(e.target.value)} />
           <Input name="cpf" label="CPF" placeholder="CPF" defaultValue={data?.cpf} onChange={e => setCpf(e.target.value)} />
           <Input name="dataAssoc" label="Data Assoc." placeholder="Data Assoc." defaultValue={data?.dataAssoc} onChange={e => setDataAssoc(e.target.value)} />
-          <Input name="catAssoc" label="Cat. Assoc." placeholder="Cat. Assoc." defaultValue={data?.catAssoc} onChange={e => setCatAssoc(e.target.value)} />
+          {/* <Input name="catAssoc" label="Cat. Assoc." placeholder="Cat. Assoc." defaultValue={data?.catAssoc} onChange={e => setCatAssoc(e.target.value)} /> */}
+          <label style={{ color: '#718096', marginTop: '10px', display: 'block' }}>Cat. Assoc</label>
+          <Select
+            variant="filled"
+            outline="none"
+            bg="gray.900"
+            _hover={{
+              bg: "gray.900",
+              cursor: "pointer"
+            }}
+            _focus={{
+              outline: "none"
+            }}
+            onChange={e => setCatAssoc(e.target.value)}
+          >
+            <option style={{ background: '#181B23', color: '#FFFFFF' }} disabled selected defaultValue={data?.catAssoc}>{data?.catAssoc}</option>
+            <option style={{ background: '#181B23', color: '#FFFFFF' }} value="ATIVO-EFETIVO">ATIVO-EFETIVO</option>
+            <option style={{ background: '#181B23', color: '#FFFFFF' }} value="INATIVO-EFETIVO">INATIVO-EFETIVO</option>
+          </Select>
           <Input name="matricula" label="Matrícula" placeholder="Matrícula" defaultValue={data?.matricula} onChange={e => setMatricula(e.target.value)} />
-          <Input name="condicao" label="Condição" placeholder="Condição" defaultValue={data?.condicao} onChange={e => setCondicao(e.target.value)} />
+          {/* <Input name="condicao" label="Condição" placeholder="Condição" defaultValue={data?.condicao} onChange={e => setCondicao(e.target.value)} /> */}
+          <label style={{ color: '#718096', marginTop: '10px', display: 'block' }}>Condição</label>
+          <Select
+            variant="filled"
+            outline="none"
+            bg="gray.900"
+            _hover={{
+              bg: "gray.900",
+              cursor: "pointer"
+            }}
+            _focus={{
+              outline: "none"
+            }}
+            onChange={e => setCondicao(e.target.value)}
+          >
+            <option style={{ background: '#181B23', color: '#FFFFFF' }} disabled selected defaultValue={data?.condicao}>{data?.condicao}</option>
+            <option style={{ background: '#181B23', color: '#FFFFFF' }} value="ATIVO">ATIVO</option>
+            <option style={{ background: '#181B23', color: '#FFFFFF' }} value="APOSENTADO">APOSENTADO</option>
+          </Select>
         </Box>
 
         <Box flex="1" >
-          <Input name="cargo" label="Cargo" placeholder="Cargo" defaultValue={data?.cargo} onChange={e => setCargo(e.target.value)} />
+          {/* <Input name="cargo" label="Cargo" placeholder="Cargo" defaultValue={data?.cargo} onChange={e => setCargo(e.target.value)} /> */}
+          <label style={{ color: '#718096', marginTop: '10px', display: 'block' }}>Cargo</label>
+          <Select
+            variant="filled"
+            outline="none"
+            bg="gray.900"
+            _hover={{
+              bg: "gray.900",
+              cursor: "pointer"
+            }}
+            _focus={{
+              outline: "none"
+            }}
+            onChange={e => setCargo(e.target.value)}
+          >
+            <option style={{ background: '#181B23', color: '#FFFFFF' }} disabled selected defaultValue={data?.cargo}>{data?.cargo}</option>
+            <option style={{ background: '#181B23', color: '#FFFFFF' }} value="Analista de Sistemas">Analista de Sistemas</option>
+            <option style={{ background: '#181B23', color: '#FFFFFF' }} value="Assistente Administrativo">Assistente Administrativo</option>
+            <option style={{ background: '#181B23', color: '#FFFFFF' }} value="Programador de Produção, Computação e Desenvolvimento">Programador de Produção, Computação e Desenvolvimento</option>
+            <option style={{ background: '#181B23', color: '#FFFFFF' }} value="Técnico de Suporte, Computação e Processamento">Técnico de Suporte, Computação e Processamento</option>
+          </Select>
           <Input name="email" label="E-mail" placeholder="E-mail" defaultValue={data?.email} onChange={e => setEmail(e.target.value)} />
           <Input name="endereco" label="Endereço" placeholder="Endereço" defaultValue={data?.endereco} onChange={e => setEndereco(e.target.value)} />
           <Input name="telefone" label="Telefone" placeholder="Telefone" defaultValue={data?.telefone} onChange={e => setTelefone(e.target.value)} />

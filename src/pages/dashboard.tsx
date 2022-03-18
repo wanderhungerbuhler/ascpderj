@@ -32,15 +32,18 @@ export default function Dashboard() {
 
   const [search, setSearch] = useState('');
   const [listPageSearchSelected, setListPageSearchSelected] = useState(Number(10));
-
   const [resultSearch, setResultSearch] = useState<OrderProps[] | null>(null);
 
   const formatedSearch = search.toLocaleUpperCase().trim();
 
+  const [listPageFilterSelected, setListPageFilterSelected] = useState('nomeServidor');
+
+  console.log(listPageFilterSelected);
+
   useEffect(() => {
     const db = getFirestore(app);
-    onSnapshot(query(collection(db, "associates"), where("nomeServidor", ">=", `${formatedSearch}`),
-      orderBy("nomeServidor", "asc"), startAt(formatedSearch), endAt(`${formatedSearch}\uf8ff`), limit(listPageSearchSelected)), snap => {
+    onSnapshot(query(collection(db, "associates"), where(`${listPageFilterSelected}`, ">=", `${formatedSearch}`),
+      orderBy(`${listPageFilterSelected}`, "asc"), startAt(formatedSearch), endAt(`${formatedSearch}\uf8ff`), limit(listPageSearchSelected)), snap => {
         const data = snap.docs.map(doc => {
           return {
             id: doc.id,
@@ -49,12 +52,55 @@ export default function Dashboard() {
         })
         setResultSearch(data as any);
       })
-  }, [formatedSearch, listPageSearchSelected])
+  }, [formatedSearch, listPageFilterSelected, listPageSearchSelected])
+
+  // useEffect(() => {
+  //   const db = getFirestore(app);
+  //   onSnapshot(query(collection(db, "associates"), where("nomeServidor", ">=", `${formatedSearch}`) || where("catAssoc", "==", `${listPageFilterSelected}`),
+  //     orderBy("nomeServidor", "asc"), startAt(formatedSearch), endAt(`${formatedSearch}\uf8ff`), limit(listPageSearchSelected)), snap => {
+  //       const data = snap.docs.map(doc => {
+  //         return {
+  //           id: doc.id,
+  //           ...doc.data()
+  //         }
+  //       })
+  //       setResultSearch(data as any);
+  //     })
+  // }, [formatedSearch, listPageSearchSelected, listPageFilterSelected])
 
   return (
     <>
       <Header />
       <Flex maxWidth={980} justifyContent="space-between" mx="auto" mt="70">
+        <Select
+          variant="filled"
+          outline="none"
+          flex="1"
+          py="2"
+          px="2"
+          width="auto"
+          maxWidth={250}
+          alignSelf="center"
+          color="gray.300"
+          position="relative"
+          bg="gray.800"
+          borderRadius={7}
+          _hover={{
+            bg: "gray.800",
+            cursor: "pointer"
+          }}
+          _focus={{
+            outline: "none"
+          }}
+          onChange={(e) => setListPageFilterSelected(String(e.target.value))}
+        >
+          <option selected>Selecione o filtro por</option>
+          <option style={{ background: '#181B23', color: '#FFFFFF' }} value="nomeServidor">Nome</option>
+          <option style={{ background: '#181B23', color: '#FFFFFF' }} value="cargo">Cargo</option>
+          <option style={{ background: '#181B23', color: '#FFFFFF' }} value="catAssoc">Cat. Assoc.</option>
+          <option style={{ background: '#181B23', color: '#FFFFFF' }} value="matricula">Matrícula</option>
+        </Select>
+
         <Flex
           as="label"
           flex="1"
@@ -93,7 +139,8 @@ export default function Dashboard() {
           bg="gray.800"
           borderRadius={7}
           _hover={{
-            bg: "gray.800"
+            bg: "gray.800",
+            cursor: "pointer"
           }}
           _focus={{
             outline: "none"
@@ -101,10 +148,10 @@ export default function Dashboard() {
           onChange={e => setListPageSearchSelected(Number(e.target.value))}
         >
           <option selected>10</option>
-          <option value="25">25</option>
-          <option value="50">50</option>
-          <option value="100">100</option>
-          <option value="1000">1000</option>
+          <option style={{ background: '#181B23', color: '#FFFFFF' }} value="25">25</option>
+          <option style={{ background: '#181B23', color: '#FFFFFF' }} value="50">50</option>
+          <option style={{ background: '#181B23', color: '#FFFFFF' }} value="100">100</option>
+          <option style={{ background: '#181B23', color: '#FFFFFF' }} value="1000">1000</option>
         </Select>
       </Flex>
       {user && <AssocsTable dataProps={!resultSearch ? tV : resultSearch} />}
