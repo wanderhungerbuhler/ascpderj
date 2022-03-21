@@ -8,6 +8,7 @@ export const Container = styled.form`
     margin-bottom: 1rem;
   }
 
+
   input {
     width: auto;
     padding: 0 1rem;

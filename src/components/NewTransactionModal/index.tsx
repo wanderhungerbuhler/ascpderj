@@ -1,8 +1,32 @@
+import React, { FormEvent, useContext, useState } from "react";
 import app from "@/../services/firebaseConfig";
-import { doc, getFirestore, updateDoc } from "firebase/firestore";
-import { FormEvent, useContext, useState } from "react";
+import { doc, getFirestore, setDoc, updateDoc } from "firebase/firestore";
+
+import * as Yup from 'yup';
+import { yupResolver } from "@hookform/resolvers/yup";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+
+import { Input } from "@/components/Form/Input";
+
 import Modal from 'react-modal';
+import { RiSave2Fill } from "react-icons/ri";
+import { Box, Button, Divider, Flex, Heading, Select } from "@chakra-ui/react";
+
 import { AuthContext } from '@/hooks/authContext';
+
+interface HSProps {
+  valorVencimento: string;
+  dataInicial: string;
+  dataFinal: string;
+}
+
+interface HPProps {
+  valorDesconto: string;
+  formaPagamento: string;
+  banco: string;
+  agencia: string;
+  conta: string;
+}
 
 interface OrderProps {
   id: string;
@@ -20,6 +44,8 @@ interface OrderProps {
   bairro: string;
   municipio: string;
   cep: string;
+  historySalary: HSProps;
+  historyPayment: HPProps;
 }
 
 interface NewTransactionModalProps {
@@ -28,11 +54,25 @@ interface NewTransactionModalProps {
   data: OrderProps | null;
 }
 
-import { Box, Button, Flex, Heading, Select } from "@chakra-ui/react";
-import { Input } from "../Form/Input";
-import { RiSave2Fill } from "react-icons/ri";
+const schemaRegister = Yup.object().shape({
+  valorVencimento: Yup.string().required('Preencher campo vazio'),
+  dataInicial: Yup.string().required('Preencher campo vazio'),
+  dataFinal: Yup.string().required('Preencher campo vazio'),
+
+  valorDesconto: Yup.string().required('Preencher campo vazio'),
+  banco: Yup.string().required('Preencher campo vazio'),
+  agencia: Yup.string().required('Preencher campo vazio'),
+  conta: Yup.string().required('Preencher campo vazio'),
+});
 
 export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransactionModalProps) {
+  const { user } = useContext(AuthContext);
+
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: yupResolver(schemaRegister)
+  })
+
+  // USER
   const [idFuncional, setIDFuncional] = useState('');
   const [nomeServidor, setNomeServidor] = useState('');
   const [cpf, setCpf] = useState('');
@@ -48,10 +88,20 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
   const [municipio, setMunicipio] = useState('');
   const [cep, setCep] = useState('');
 
-  const { user } = useContext(AuthContext);
+  // HISTORY SALARY
+  const [valorVencimento, setValorVencimento] = useState('');
+  const [dataInicial, setDataInicial] = useState('');
+  const [dataFinal, setDataFinal] = useState('');
 
-  async function handleSubmit(e: FormEvent) {
-    e.preventDefault();
+  // HISTORY PAYMENT
+  const [valorDesconto, setValorDesconto] = useState('');
+  const [formaPagamento, setFormaPagamento] = useState('');
+  const [banco, setBanco] = useState('');
+  const [agencia, setAgencia] = useState('');
+  const [conta, setConta] = useState('');
+
+  const handleSubmitRegister: SubmitHandler<OrderProps | FieldValues> = async (dataR, event) => {
+    event?.preventDefault();
 
     const db = getFirestore(app);
 
@@ -70,11 +120,24 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
       bairro: bairro ? bairro : data?.bairro,
       municipio: municipio ? municipio : data?.municipio,
       cep: cep ? cep : data?.cep,
-      usuario: user?.email,
+      update_by: user?.email,
+      historySalary: {
+        valorVencimento: valorVencimento ? valorVencimento : data?.historySalary?.valorVencimento,
+        dataInicial: dataInicial ? dataInicial : data?.historySalary?.dataInicial,
+        dataFinal: dataInicial ? dataInicial : data?.historySalary?.dataFinal,
+      },
+      historyPayment: {
+        valorDesconto: valorDesconto ? valorDesconto : data?.historyPayment?.valorDesconto,
+        formaPagamento: formaPagamento ? formaPagamento : data?.historyPayment?.formaPagamento,
+        banco: banco ? banco : data?.historyPayment?.banco,
+        agencia: agencia ? agencia : data?.historyPayment?.agencia,
+        conta: conta ? conta : data?.historyPayment?.conta,
+      }
     });
 
     onRequestClose();
 
+    // CADASTRO ASSSOCIADO
     setIDFuncional('');
     setNomeServidor('');
     setCpf('');
@@ -89,6 +152,19 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
     setBairro('');
     setMunicipio('');
     setCep('');
+
+
+    // HISTORY SALARY
+    setValorVencimento('');
+    setDataInicial('');
+    setDataFinal('');
+
+    // HISTORY PAYMENT
+    setValorDesconto('');
+    setBanco('');
+    setFormaPagamento('');
+    setAgencia('');
+    setConta('');
   }
 
   return (
@@ -106,20 +182,48 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
         borderRadius={8}
         flexDir="row"
         flexWrap="wrap"
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(handleSubmitRegister)}
       >
 
-        <Heading w="100%" mb="7">Atualização Cadastral</Heading>
+        <Heading w="100%" mb="7">Dados Básicos</Heading>
 
         <Box flex="1" mr="100">
-          <Input name="idfuncional" label="ID Funcional" placeholder="ID Funcional" id="idFuncional" defaultValue={data?.idFuncional || idFuncional} onChange={e => setIDFuncional(e.currentTarget.value)} />
-          <Input name="nomeServidor" label="Nome Completo" placeholder="Nome Completo" defaultValue={data?.nomeServidor} onChange={e => setNomeServidor(e.target.value)} />
-          <Input name="cpf" label="CPF" placeholder="CPF" defaultValue={data?.cpf} onChange={e => setCpf(e.target.value)} />
-          <Input name="dataAssoc" label="Data Assoc." placeholder="Data Assoc." defaultValue={data?.dataAssoc} onChange={e => setDataAssoc(e.target.value)} />
+          <Input
+            label="ID Funcional"
+            placeholder="ID Funcional"
+            id="idFuncional"
+            defaultValue={data?.idFuncional || idFuncional}
+            error={errors?.idFuncional}
+            {...register('idFuncional')}
+          />
+
+          <Input
+            label="Nome Completo"
+            placeholder="Nome Completo"
+            defaultValue={data?.nomeServidor}
+            error={errors?.nomeServidor}
+            {...register('nomeServidor')}
+          />
+
+          <Input
+            label="CPF"
+            placeholder="CPF"
+            defaultValue={data?.cpf}
+            error={errors?.cpf}
+            {...register('cpf')}
+          />
+          <Input
+            label="Data Assoc."
+            placeholder="Data Assoc."
+            defaultValue={data?.dataAssoc}
+            error={errors?.dataAssoc}
+            {...register('dataAssoc')}
+          />
           {/* <Input name="catAssoc" label="Cat. Assoc." placeholder="Cat. Assoc." defaultValue={data?.catAssoc} onChange={e => setCatAssoc(e.target.value)} /> */}
-          <label style={{ color: '#718096', marginTop: '10px', display: 'block' }}>Cat. Assoc</label>
+          <label style={{ color: '#718096', margin: '8px 12px 8px 0', display: 'block' }}>Cat. Assoc</label>
           <Select
             variant="filled"
+            height="3rem"
             outline="none"
             bg="gray.900"
             _hover={{
@@ -129,17 +233,26 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
             _focus={{
               outline: "none"
             }}
-            onChange={e => setCatAssoc(e.target.value)}
+            {...register('catAssoc')}
           >
             <option style={{ background: '#181B23', color: '#FFFFFF' }} disabled selected defaultValue={data?.catAssoc}>{data?.catAssoc}</option>
             <option style={{ background: '#181B23', color: '#FFFFFF' }} value="ATIVO-EFETIVO">ATIVO-EFETIVO</option>
             <option style={{ background: '#181B23', color: '#FFFFFF' }} value="INATIVO-EFETIVO">INATIVO-EFETIVO</option>
           </Select>
-          <Input name="matricula" label="Matrícula" placeholder="Matrícula" defaultValue={data?.matricula} onChange={e => setMatricula(e.target.value)} />
+
+          <Input
+            label="Matrícula"
+            placeholder="Matrícula"
+            defaultValue={data?.matricula}
+            error={errors?.matricula}
+            {...register('matricula')}
+          />
+
           {/* <Input name="condicao" label="Condição" placeholder="Condição" defaultValue={data?.condicao} onChange={e => setCondicao(e.target.value)} /> */}
-          <label style={{ color: '#718096', marginTop: '10px', display: 'block' }}>Condição</label>
+          <label style={{ color: '#718096', margin: '8px 12px 8px 0', display: 'block' }}>Condição</label>
           <Select
             variant="filled"
+            height="3rem"
             outline="none"
             bg="gray.900"
             _hover={{
@@ -149,7 +262,7 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
             _focus={{
               outline: "none"
             }}
-            onChange={e => setCondicao(e.target.value)}
+            {...register('condicao')}
           >
             <option style={{ background: '#181B23', color: '#FFFFFF' }} disabled selected defaultValue={data?.condicao}>{data?.condicao}</option>
             <option style={{ background: '#181B23', color: '#FFFFFF' }} value="ATIVO">ATIVO</option>
@@ -157,11 +270,12 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
           </Select>
         </Box>
 
-        <Box flex="1" >
+        <Box flex="1">
           {/* <Input name="cargo" label="Cargo" placeholder="Cargo" defaultValue={data?.cargo} onChange={e => setCargo(e.target.value)} /> */}
-          <label style={{ color: '#718096', marginTop: '10px', display: 'block' }}>Cargo</label>
+          <label style={{ color: '#718096', margin: '8px 12px 8px 0', display: 'block' }}>Cargo</label>
           <Select
             variant="filled"
+            height="3rem"
             outline="none"
             bg="gray.900"
             _hover={{
@@ -171,7 +285,7 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
             _focus={{
               outline: "none"
             }}
-            onChange={e => setCargo(e.target.value)}
+            {...register('cargo')}
           >
             <option style={{ background: '#181B23', color: '#FFFFFF' }} disabled selected defaultValue={data?.cargo}>{data?.cargo}</option>
             <option style={{ background: '#181B23', color: '#FFFFFF' }} value="Analista de Sistemas">Analista de Sistemas</option>
@@ -179,12 +293,152 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
             <option style={{ background: '#181B23', color: '#FFFFFF' }} value="Programador de Produção, Computação e Desenvolvimento">Programador de Produção, Computação e Desenvolvimento</option>
             <option style={{ background: '#181B23', color: '#FFFFFF' }} value="Técnico de Suporte, Computação e Processamento">Técnico de Suporte, Computação e Processamento</option>
           </Select>
-          <Input name="email" label="E-mail" placeholder="E-mail" defaultValue={data?.email} onChange={e => setEmail(e.target.value)} />
-          <Input name="endereco" label="Endereço" placeholder="Endereço" defaultValue={data?.endereco} onChange={e => setEndereco(e.target.value)} />
-          <Input name="telefone" label="Telefone" placeholder="Telefone" defaultValue={data?.telefone} onChange={e => setTelefone(e.target.value)} />
-          <Input name="bairro" label="Bairro" placeholder="Bairro" defaultValue={data?.bairro} onChange={e => setBairro(e.target.value)} />
-          <Input name="municipio" label="Munícipio" placeholder="Município" defaultValue={data?.municipio} onChange={e => setMunicipio(e.target.value)} />
-          <Input name="cep" label="CEP" placeholder="CEP" defaultValue={data?.cep} onChange={e => setCep(e.target.value)} />
+
+          <Input
+            label="E-mail"
+            placeholder="E-mail"
+            defaultValue={data?.email}
+            error={errors?.email}
+            {...register('email')}
+          />
+
+          <Input
+            label="Endereço"
+            placeholder="Endereço"
+            defaultValue={data?.endereco}
+            error={errors?.endereco}
+            {...register('endereco')}
+          />
+
+          <Input
+            label="Telefone"
+            placeholder="Telefone"
+            defaultValue={data?.telefone}
+            error={errors?.telefone}
+            {...register('telefone')}
+          />
+
+          <Input
+            label="Bairro"
+            placeholder="Bairro"
+            defaultValue={data?.bairro}
+            error={errors?.bairro}
+            {...register('bairro')}
+          />
+          <Input
+            label="Munícipio"
+            placeholder="Município"
+            defaultValue={data?.municipio}
+            error={errors?.municipio}
+            {...register('municipio')}
+          />
+          <Input
+            label="CEP"
+            placeholder="CEP"
+            defaultValue={data?.cep}
+            error={errors?.cep}
+            {...register('cep')}
+          />
+        </Box>
+
+        <Divider mt="10" colorScheme="whiteAlpha" />
+
+        <Heading w="100%" mt="7" mb="7">Histórico de Vencimentos</Heading>
+
+        <Box w="100%" display="flex" justifyContent="space-between">
+          <Input
+            w="95%"
+            label="Valor do Vencimento (R$)"
+            placeholder="Valor do Vencimento (R$)"
+            defaultValue={data?.historySalary?.valorVencimento}
+            error={errors?.valorVencimento}
+            {...register('valorVencimento')}
+          />
+
+
+          <Input
+            w="95%"
+            label="Data Inicial (00/00/0000)"
+            placeholder="Data Inicial"
+            defaultValue={data?.historySalary?.dataInicial}
+            error={errors?.dataInicial}
+            {...register('dataInicial')}
+          />
+
+          <Input
+            w="95%"
+            label="Data Final (00/00/0000)"
+            placeholder="Data Final"
+            defaultValue={data?.historySalary?.dataFinal}
+            error={errors?.dataFinal}
+            {...register('dataFinal')}
+          />
+        </Box>
+
+        <Divider mt="10" colorScheme="whiteAlpha" />
+
+        <Heading w="100%" mt="7" mb="7" display="flex" alignItems="center">Histórico de Pagamento <Heading size="md" ml="2" mt="2" fontWeight="normal" color="gray.500">- (Desconto em Folha e Boleto Bancário)</Heading></Heading>
+
+        <Box w="100%" display="flex" justifyContent="space-between" alignItems="center">
+          <Input
+            w="95%"
+            label="Valor do Desconto (%)"
+            placeholder="Valor do Desconto (%)"
+            defaultValue={data?.historyPayment?.valorDesconto}
+            error={errors?.valorDesconto}
+            {...register('valorDesconto')}
+          />
+
+          <Box w="100%" display="flex" flexWrap="wrap" alignItems="center">
+            <label style={{ display: 'flex', flexWrap: 'wrap', color: '#718096', margin: '8px 12px 8px 0' }}>Forma de Pagamento</label>
+            <Select
+              variant="filled"
+              height="3rem"
+              outline="none"
+              bg="gray.900"
+              _hover={{
+                bg: "gray.900",
+                cursor: "pointer"
+              }}
+              _focus={{
+                outline: "none"
+              }}
+              {...register('formaPagamento')}
+            >
+              <option style={{ background: '#181B23', color: '#FFFFFF' }} disabled selected defaultValue={data?.historyPayment?.formaPagamento}>{data?.historyPayment?.formaPagamento}</option>
+              <option style={{ background: '#181B23', color: '#FFFFFF' }} value="Boleto Bancario">Boleto Bancário</option>
+              <option style={{ background: '#181B23', color: '#FFFFFF' }} value="Desconto em Folha">Desconto em Folha</option>
+            </Select>
+          </Box>
+        </Box>
+
+        <Box w="100%" display="flex" justifyContent="space-between" alignItems="center">
+          <Input
+            w="95%"
+            label="Banco"
+            placeholder="Banco"
+            defaultValue={data?.historyPayment?.banco}
+            error={errors?.banco}
+            {...register('banco')}
+          />
+
+          <Input
+            w="95%"
+            label="Agência"
+            placeholder="Agência"
+            defaultValue={data?.historyPayment?.agencia}
+            error={errors?.agencia}
+            {...register('agencia')}
+          />
+
+          <Input
+            w="95%"
+            label="Conta"
+            placeholder="Conta"
+            defaultValue={data?.historyPayment?.conta}
+            error={errors?.conta}
+            {...register('conta')}
+          />
         </Box>
 
         <Box w="100%" mt="7" display="flex" justifyContent="flex-end">

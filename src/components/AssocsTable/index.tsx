@@ -23,6 +23,20 @@ import { NewTransactionModal } from "../NewTransactionModal";
 import app from "@/../services/firebaseConfig";
 import { useRouter } from "next/router";
 
+interface HSProps {
+  valorVencimento: string;
+  dataInicial: string;
+  dataFinal: string;
+}
+
+interface HPProps {
+  valorDesconto: string;
+  formaPagamento: string;
+  banco: string;
+  agencia: string;
+  conta: string;
+}
+
 interface OrderProps {
   id: string;
   idFuncional: string;
@@ -39,6 +53,8 @@ interface OrderProps {
   bairro: string;
   municipio: string;
   cep: string;
+  historySalary: HSProps;
+  historyPayment: HPProps;
 }
 
 interface DataProps {
