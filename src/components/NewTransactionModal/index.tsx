@@ -14,20 +14,6 @@ import { Box, Button, Divider, Flex, Heading, Select } from "@chakra-ui/react";
 
 import { AuthContext } from '@/hooks/authContext';
 
-interface HSProps {
-  valorVencimento: string;
-  dataInicial: string;
-  dataFinal: string;
-}
-
-interface HPProps {
-  valorDesconto: string;
-  formaPagamento: string;
-  banco: string;
-  agencia: string;
-  conta: string;
-}
-
 interface OrderProps {
   id: string;
   idFuncional: string;
@@ -44,8 +30,15 @@ interface OrderProps {
   bairro: string;
   municipio: string;
   cep: string;
-  historySalary: HSProps;
-  historyPayment: HPProps;
+
+  valorVencimento?: string;
+  dataInicial?: string;
+  dataFinal?: string;
+  valorDesconto?: string;
+  formaPagamento?: string;
+  banco?: string;
+  agencia?: string;
+  conta?: string;
 }
 
 interface NewTransactionModalProps {
@@ -121,18 +114,16 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
       municipio: municipio ? municipio : data?.municipio,
       cep: cep ? cep : data?.cep,
       update_by: user?.email,
-      historySalary: {
-        valorVencimento: valorVencimento ? valorVencimento : data?.historySalary?.valorVencimento,
-        dataInicial: dataInicial ? dataInicial : data?.historySalary?.dataInicial,
-        dataFinal: dataInicial ? dataInicial : data?.historySalary?.dataFinal,
-      },
-      historyPayment: {
-        valorDesconto: valorDesconto ? valorDesconto : data?.historyPayment?.valorDesconto,
-        formaPagamento: formaPagamento ? formaPagamento : data?.historyPayment?.formaPagamento,
-        banco: banco ? banco : data?.historyPayment?.banco,
-        agencia: agencia ? agencia : data?.historyPayment?.agencia,
-        conta: conta ? conta : data?.historyPayment?.conta,
-      }
+
+      valorVencimento: valorVencimento ? valorVencimento : dataR?.valorVencimento,
+      dataInicial: dataInicial ? dataInicial : dataR?.dataInicial,
+      dataFinal: dataInicial ? dataInicial : dataR?.dataFinal,
+
+      valorDesconto: valorDesconto ? valorDesconto : dataR?.valorDesconto,
+      formaPagamento: formaPagamento ? formaPagamento : dataR?.formaPagamento,
+      banco: banco ? banco : dataR?.banco,
+      agencia: agencia ? agencia : dataR?.agencia,
+      conta: conta ? conta : dataR?.conta,
     });
 
     onRequestClose();
@@ -350,7 +341,7 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
             w="95%"
             label="Valor do Vencimento (R$)"
             placeholder="Valor do Vencimento (R$)"
-            defaultValue={data?.historySalary?.valorVencimento}
+            defaultValue={data?.valorVencimento}
             error={errors?.valorVencimento}
             {...register('valorVencimento')}
           />
@@ -360,7 +351,7 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
             w="95%"
             label="Data Inicial (00/00/0000)"
             placeholder="Data Inicial"
-            defaultValue={data?.historySalary?.dataInicial}
+            defaultValue={data?.dataInicial}
             error={errors?.dataInicial}
             {...register('dataInicial')}
           />
@@ -369,7 +360,7 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
             w="95%"
             label="Data Final (00/00/0000)"
             placeholder="Data Final"
-            defaultValue={data?.historySalary?.dataFinal}
+            defaultValue={data?.dataFinal}
             error={errors?.dataFinal}
             {...register('dataFinal')}
           />
@@ -384,7 +375,7 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
             w="95%"
             label="Valor do Desconto (%)"
             placeholder="Valor do Desconto (%)"
-            defaultValue={data?.historyPayment?.valorDesconto}
+            defaultValue={data?.valorDesconto}
             error={errors?.valorDesconto}
             {...register('valorDesconto')}
           />
@@ -405,7 +396,7 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
               }}
               {...register('formaPagamento')}
             >
-              <option style={{ background: '#181B23', color: '#FFFFFF' }} disabled selected defaultValue={data?.historyPayment?.formaPagamento}>{data?.historyPayment?.formaPagamento}</option>
+              <option style={{ background: '#181B23', color: '#FFFFFF' }} disabled selected defaultValue={data?.formaPagamento}>{data?.formaPagamento}</option>
               <option style={{ background: '#181B23', color: '#FFFFFF' }} value="Boleto Bancario">Boleto Bancário</option>
               <option style={{ background: '#181B23', color: '#FFFFFF' }} value="Desconto em Folha">Desconto em Folha</option>
             </Select>
@@ -417,7 +408,7 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
             w="95%"
             label="Banco"
             placeholder="Banco"
-            defaultValue={data?.historyPayment?.banco}
+            defaultValue={data?.banco}
             error={errors?.banco}
             {...register('banco')}
           />
@@ -426,7 +417,7 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
             w="95%"
             label="Agência"
             placeholder="Agência"
-            defaultValue={data?.historyPayment?.agencia}
+            defaultValue={data?.agencia}
             error={errors?.agencia}
             {...register('agencia')}
           />
@@ -435,7 +426,7 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
             w="95%"
             label="Conta"
             placeholder="Conta"
-            defaultValue={data?.historyPayment?.conta}
+            defaultValue={data?.conta}
             error={errors?.conta}
             {...register('conta')}
           />

@@ -23,20 +23,6 @@ import { NewTransactionModal } from "../NewTransactionModal";
 import app from "@/../services/firebaseConfig";
 import { useRouter } from "next/router";
 
-interface HSProps {
-  valorVencimento: string;
-  dataInicial: string;
-  dataFinal: string;
-}
-
-interface HPProps {
-  valorDesconto: string;
-  formaPagamento: string;
-  banco: string;
-  agencia: string;
-  conta: string;
-}
-
 interface OrderProps {
   id: string;
   idFuncional: string;
@@ -53,15 +39,22 @@ interface OrderProps {
   bairro: string;
   municipio: string;
   cep: string;
-  historySalary: HSProps;
-  historyPayment: HPProps;
+
+  valorVencimento?: string;
+  dataInicial?: string;
+  dataFinal?: string;
+  valorDesconto?: string;
+  formaPagamento?: string;
+  banco?: string;
+  agencia?: string;
+  conta?: string;
 }
 
 interface DataProps {
-  dataProps: OrderProps[] | null;
+  data: OrderProps[] | null;
 }
 
-export function AssocsTable({ dataProps }: DataProps) {
+export function AssocsTable({ data }: DataProps) {
   const [dd, setDD] = useState<OrderProps | null>(null);
   const [isNewTransactionModal, setIsNewTransactionModal] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -109,7 +102,7 @@ export function AssocsTable({ dataProps }: DataProps) {
             </Thead>
             <Tbody>
 
-              {dataProps?.map(d => (
+              {data?.map(d => (
                 <Tr key={d.id}>
                   <Td>
                     <Box>

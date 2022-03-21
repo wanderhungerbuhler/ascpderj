@@ -154,7 +154,7 @@ export default function Dashboard() {
           <option style={{ background: '#181B23', color: '#FFFFFF' }} value="1000">1000</option>
         </Select>
       </Flex>
-      {user && <AssocsTable dataProps={!resultSearch ? tV : resultSearch} />}
+      {user && <AssocsTable data={!resultSearch ? tV : resultSearch} />}
     </>
   )
 }
