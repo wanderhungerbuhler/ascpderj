@@ -64,6 +64,8 @@ export function AuthProvider({ children }: AuthProvider) {
       setUser(user as any);
     });
 
+    console.log(subscriber);
+
     { user ? router.push('/dashboard') : router.push('/') }
 
     return subscriber;

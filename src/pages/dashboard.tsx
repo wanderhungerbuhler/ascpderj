@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Flex, Input, Icon, Select } from '@chakra-ui/react';
-import { RiSearchLine } from 'react-icons/ri';
+import { Flex, Input, Icon, Select, Box, Stack, Text, Link } from '@chakra-ui/react';
+import { RiContactsLine, RiDashboard2Line, RiMoneyDollarBoxLine, RiSearchLine } from 'react-icons/ri';
 
 import { Header } from '@/components/Header';
 import { AssocsTable } from '@/components/AssocsTable';
@@ -25,6 +25,15 @@ interface OrderProps {
   bairro: string;
   municipio: string;
   cep: string;
+
+  valorVencimento?: string;
+  dataInicial?: string;
+  dataFinal?: string;
+  valorDesconto?: string;
+  formaPagamento?: string;
+  banco?: string;
+  agencia?: string;
+  conta?: string;
 }
 
 export default function Dashboard() {
@@ -71,13 +80,14 @@ export default function Dashboard() {
   return (
     <>
       <Header />
-      <Flex maxWidth={980} justifyContent="space-between" mx="auto" mt="70">
+      <Flex maxWidth={810} alignItems="center" m="auto" mt="70">
         <Select
           variant="filled"
           outline="none"
           flex="1"
           py="2"
           px="2"
+          height={50}
           width="auto"
           maxWidth={250}
           alignSelf="center"
@@ -104,14 +114,15 @@ export default function Dashboard() {
         <Flex
           as="label"
           flex="1"
-          py="4"
-          px="8"
+          px="6"
+          py="3.5"
+          height={50}
           maxWidth={400}
           alignSelf="center"
           color="gray.200"
           position="relative"
           bg="gray.800"
-          borderRadius="full"
+          borderRadius="8"
         >
           <Input
             type="text"
@@ -132,6 +143,7 @@ export default function Dashboard() {
           flex="1"
           py="2"
           px="2"
+          height={50}
           maxWidth={100}
           alignSelf="center"
           color="gray.200"
@@ -154,7 +166,45 @@ export default function Dashboard() {
           <option style={{ background: '#181B23', color: '#FFFFFF' }} value="1000">1000</option>
         </Select>
       </Flex>
-      {user && <AssocsTable data={!resultSearch ? tV : resultSearch} />}
+
+      <Flex w="100%" my="6" maxWidth={1280} mx="auto">
+        <Box as="aside" w="auto" height="350" bg="gray.800" p="7" borderRadius="8">
+          <Stack spacing="12" align="flex-start">
+            <Box>
+              <Text fontWeight="bold" color="gray.400" fontSize="small">GERAL</Text>
+              <Stack spacing="4" mt="8" align="stretch">
+                <Link display="flex" alignItems="center">
+                  <Icon as={RiDashboard2Line} fontSize="20" />
+                  <Text ml="4" fontWeight="medium">Dashboard</Text>
+                </Link>
+
+                <Link display="flex" alignItems="center">
+                  <Icon as={RiContactsLine} fontSize="20" />
+                  <Text ml="4" fontWeight="medium">Usuários</Text>
+                </Link>
+              </Stack>
+            </Box>
+
+            <Box>
+              <Text fontWeight="bold" color="gray.400" fontSize="small">HISTÓRICOS</Text>
+              <Stack spacing="4" mt="8" align="stretch">
+                <Link display="flex" alignItems="center">
+                  <Icon as={RiMoneyDollarBoxLine} fontSize="20" />
+                  <Text ml="4" fontWeight="medium">Pagamentos</Text>
+                </Link>
+
+                <Link display="flex" alignItems="center">
+                  <Icon as={RiMoneyDollarBoxLine} fontSize="20" />
+                  <Text ml="4" fontWeight="medium">Vencimentos</Text>
+                </Link>
+              </Stack>
+            </Box>
+          </Stack>
+        </Box>
+
+        {user && <AssocsTable data={!resultSearch ? tV : resultSearch} />}
+      </Flex>
+
     </>
   )
 }

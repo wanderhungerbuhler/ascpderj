@@ -11,6 +11,7 @@ import Image from 'next/image';
 import logoSvg from '@/assets/logo.svg';
 import { Flex, Button, Stack } from '@chakra-ui/react';
 import { Input } from '@/components/Form/Input';
+import { useRouter } from 'next/router';
 
 interface SignInFormData {
   email: string;
@@ -27,20 +28,31 @@ export default function SignIn() {
     resolver: yupResolver(schemaSignIn)
   });
 
+  const router = useRouter();
+
   const { errors } = formState;
 
   const signIn: SubmitHandler<SignInFormData | FieldValues> = async ({ email, password }, event) => {
     event?.preventDefault();
 
     const auth = getAuth(app);
-    await signInWithEmailAndPassword(auth, email, password);
-
-    setPersistence(auth, browserLocalPersistence)
+    await signInWithEmailAndPassword(auth, email, password)
       .then(() => {
-        return signInWithEmailAndPassword(auth, email, password);
-      }).catch((error) => {
-        console.log(error.code, error.message);
+        setPersistence(auth, browserLocalPersistence)
+          .then(() => {
+            return signInWithEmailAndPassword(auth, email, password);
+          }).catch((error) => {
+            console.log(error.code, error.message);
+          });
+      })
+      .catch((error) => {
+        if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+          alert('Usuário não encontrado. E-mail e/ou senha inválida!');
+
+          router.reload();
+        }
       });
+
   }
 
   return (

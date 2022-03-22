@@ -1,6 +1,6 @@
 import React, { FormEvent, useContext, useState } from "react";
 import app from "@/../services/firebaseConfig";
-import { doc, getFirestore, setDoc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getFirestore, setDoc, updateDoc } from "firebase/firestore";
 
 import * as Yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -124,6 +124,28 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
       banco: banco ? banco : dataR?.banco,
       agencia: agencia ? agencia : dataR?.agencia,
       conta: conta ? conta : dataR?.conta,
+    });
+
+    await addDoc(collection(db, "history_salary"), {
+      id: `${data?.id}`,
+      nomeServidor: `${data?.nomeServidor}`,
+      historySalary: {
+        valorVencimento: valorVencimento ? valorVencimento : dataR?.valorVencimento,
+        dataInicial: dataInicial ? dataInicial : dataR?.dataInicial,
+        dataFinal: dataInicial ? dataInicial : dataR?.dataFinal,
+      },
+    });
+
+    await addDoc(collection(db, "history_payment"), {
+      id: `${data?.id}`,
+      nomeServidor: `${data?.nomeServidor}`,
+      historyPayment: {
+        valorDesconto: valorDesconto ? valorDesconto : dataR?.valorDesconto,
+        formaPagamento: formaPagamento ? formaPagamento : dataR?.formaPagamento,
+        banco: banco ? banco : dataR?.banco,
+        agencia: agencia ? agencia : dataR?.agencia,
+        conta: conta ? conta : dataR?.conta,
+      }
     });
 
     onRequestClose();
