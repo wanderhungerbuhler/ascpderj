@@ -30,14 +30,14 @@ export default function Sidebar() {
         <Box>
           <Text fontWeight="bold" color="gray.400" fontSize="small">HISTÓRICOS</Text>
           <Stack spacing="4" mt="8" align="stretch">
-            <ActiveLink href="/pagamentos" passHref>
+            <ActiveLink href="/dashboard" passHref>
               <ChrackraLink display="flex" alignItems="center">
                 <Icon as={RiMoneyDollarBoxLine} fontSize="20" />
                 <Text ml="4" fontWeight="medium">Pagamentos</Text>
               </ChrackraLink>
             </ActiveLink>
 
-            <ActiveLink href="/vencimentos" passHref>
+            <ActiveLink href="/dashboard" passHref>
               <ChrackraLink display="flex" alignItems="center">
                 <Icon as={RiMoneyDollarBoxLine} fontSize="20" />
                 <Text ml="4" fontWeight="medium">Vencimentos</Text>
