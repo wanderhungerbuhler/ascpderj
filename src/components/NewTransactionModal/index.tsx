@@ -150,8 +150,7 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
     //   }
     // });
 
-    // onRequestClose();
-    console.log(data);
+    onRequestClose();
 
     // CADASTRO ASSSOCIADO
     setIDFuncional('');
