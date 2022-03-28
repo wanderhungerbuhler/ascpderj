@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Flex, Input, Icon, Select, Box, Stack, Text, Link } from '@chakra-ui/react';
+import { Flex, Input, Icon, Select, Box, Stack, Text, Link as ChrackraLink } from '@chakra-ui/react';
+import Link from 'next/link';
+
 import { RiContactsLine, RiDashboard2Line, RiMoneyDollarBoxLine, RiSearchLine } from 'react-icons/ri';
 
 import { Header } from '@/components/Header';
@@ -8,6 +10,7 @@ import { AuthContext } from '@/hooks/authContext';
 
 import app from '../../services/firebaseConfig';
 import { getFirestore, onSnapshot, query, collection, orderBy, limit, where, Firestore, startAt, endAt } from 'firebase/firestore';
+import Sidebar from '@/components/Sidebar';
 
 interface OrderProps {
   id: string;
@@ -168,40 +171,7 @@ export default function Dashboard() {
       </Flex>
 
       <Flex w="100%" my="6" maxWidth={1280} mx="auto">
-        <Box as="aside" w="auto" height="350" bg="gray.800" p="7" borderRadius="8">
-          <Stack spacing="12" align="flex-start">
-            <Box>
-              <Text fontWeight="bold" color="gray.400" fontSize="small">GERAL</Text>
-              <Stack spacing="4" mt="8" align="stretch">
-                <Link display="flex" alignItems="center">
-                  <Icon as={RiDashboard2Line} fontSize="20" />
-                  <Text ml="4" fontWeight="medium">Dashboard</Text>
-                </Link>
-
-                <Link display="flex" alignItems="center">
-                  <Icon as={RiContactsLine} fontSize="20" />
-                  <Text ml="4" fontWeight="medium">Usuários</Text>
-                </Link>
-              </Stack>
-            </Box>
-
-            <Box>
-              <Text fontWeight="bold" color="gray.400" fontSize="small">HISTÓRICOS</Text>
-              <Stack spacing="4" mt="8" align="stretch">
-                <Link display="flex" alignItems="center">
-                  <Icon as={RiMoneyDollarBoxLine} fontSize="20" />
-                  <Text ml="4" fontWeight="medium">Pagamentos</Text>
-                </Link>
-
-                <Link display="flex" alignItems="center">
-                  <Icon as={RiMoneyDollarBoxLine} fontSize="20" />
-                  <Text ml="4" fontWeight="medium">Vencimentos</Text>
-                </Link>
-              </Stack>
-            </Box>
-          </Stack>
-        </Box>
-
+        <Sidebar />
         {user && <AssocsTable data={!resultSearch ? tV : resultSearch} />}
       </Flex>
 

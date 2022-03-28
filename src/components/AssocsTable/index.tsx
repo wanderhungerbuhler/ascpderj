@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { deleteDoc, doc, getFirestore } from 'firebase/firestore';
 
-import { Flex, FormControl, IconButton } from '@chakra-ui/react';
+import { Flex, IconButton } from '@chakra-ui/react';
 import {
   Table,
   Thead,
@@ -86,7 +86,7 @@ export function AssocsTable({ data }: DataProps) {
     <>
       <NewTransactionModal data={dd} isOpen={isNewTransactionModal} onRequestClose={handleCloseNewTransactionModal} />
 
-      <Flex width="100%" maxWidth={980} mx="auto">
+      <Flex w="100%" maxWidth={980} mx="auto">
         <Box flex="1" borderRadius="8" bg="gray.800" p="7" mx="auto" mb="70">
           <Table w="100%" variant="simple" colorScheme="whiteAlpha">
             <TableCaption placement="bottom">Relatório de Associados ASCPDERJ</TableCaption>

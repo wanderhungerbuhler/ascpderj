@@ -48,14 +48,14 @@ interface NewTransactionModalProps {
 }
 
 const schemaRegister = Yup.object().shape({
-  valorVencimento: Yup.string().required('Preencher campo vazio'),
-  dataInicial: Yup.string().required('Preencher campo vazio'),
-  dataFinal: Yup.string().required('Preencher campo vazio'),
+  // valorVencimento: Yup.string().required('Preencher campo vazio'),
+  // dataInicial: Yup.string().required('Preencher campo vazio'),
+  // dataFinal: Yup.string().required('Preencher campo vazio'),
 
-  valorDesconto: Yup.string().required('Preencher campo vazio'),
-  banco: Yup.string().required('Preencher campo vazio'),
-  agencia: Yup.string().required('Preencher campo vazio'),
-  conta: Yup.string().required('Preencher campo vazio'),
+  // valorDesconto: Yup.string().required('Preencher campo vazio'),
+  // banco: Yup.string().required('Preencher campo vazio'),
+  // agencia: Yup.string().required('Preencher campo vazio'),
+  // conta: Yup.string().required('Preencher campo vazio'),
 });
 
 export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransactionModalProps) {
@@ -98,57 +98,60 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
 
     const db = getFirestore(app);
 
+    console.log(dataR)
+
     await updateDoc(doc(db, "associates", `${data?.id}`), {
-      idFuncional: idFuncional ? idFuncional : data?.idFuncional,
-      nomeServidor: nomeServidor ? nomeServidor : data?.nomeServidor,
-      cpf: cpf ? cpf : data?.cpf,
-      dataAssoc: dataAssoc ? dataAssoc : data?.dataAssoc,
-      catAssoc: catAssoc ? catAssoc : data?.catAssoc,
-      matricula: matricula ? matricula : data?.matricula,
-      condicao: condicao ? condicao : data?.condicao,
-      cargo: cargo ? cargo : data?.cargo,
-      email: email ? email : data?.email,
-      endereco: endereco ? endereco : data?.endereco,
-      telefone: telefone ? telefone : data?.telefone,
-      bairro: bairro ? bairro : data?.bairro,
-      municipio: municipio ? municipio : data?.municipio,
-      cep: cep ? cep : data?.cep,
+      idFuncional: idFuncional ? idFuncional : dataR?.idFuncional,
+      nomeServidor: nomeServidor ? nomeServidor : dataR?.nomeServidor,
+      cpf: cpf ? cpf : dataR?.cpf,
+      dataAssoc: dataAssoc ? dataAssoc : dataR?.dataAssoc,
+      catAssoc: catAssoc ? catAssoc : dataR?.catAssoc,
+      matricula: matricula ? matricula : dataR?.matricula,
+      condicao: condicao ? condicao : dataR?.condicao,
+      cargo: cargo ? cargo : dataR?.cargo,
+      email: email ? email : dataR?.email,
+      endereco: endereco ? endereco : dataR?.endereco,
+      telefone: telefone ? telefone : dataR?.telefone,
+      bairro: bairro ? bairro : dataR?.bairro,
+      municipio: municipio ? municipio : dataR?.municipio,
+      cep: cep ? cep : dataR?.cep,
       update_by: user?.email,
 
-      valorVencimento: valorVencimento ? valorVencimento : dataR?.valorVencimento,
-      dataInicial: dataInicial ? dataInicial : dataR?.dataInicial,
-      dataFinal: dataInicial ? dataInicial : dataR?.dataFinal,
+      // valorVencimento: valorVencimento ? valorVencimento : dataR?.valorVencimento,
+      // dataInicial: dataInicial ? dataInicial : dataR?.dataInicial,
+      // dataFinal: dataInicial ? dataInicial : dataR?.dataFinal,
 
-      valorDesconto: valorDesconto ? valorDesconto : dataR?.valorDesconto,
-      formaPagamento: formaPagamento ? formaPagamento : dataR?.formaPagamento,
-      banco: banco ? banco : dataR?.banco,
-      agencia: agencia ? agencia : dataR?.agencia,
-      conta: conta ? conta : dataR?.conta,
+      // valorDesconto: valorDesconto ? valorDesconto : dataR?.valorDesconto,
+      // formaPagamento: formaPagamento ? formaPagamento : dataR?.formaPagamento,
+      // banco: banco ? banco : dataR?.banco,
+      // agencia: agencia ? agencia : dataR?.agencia,
+      // conta: conta ? conta : dataR?.conta,
     });
 
-    await addDoc(collection(db, "history_salary"), {
-      id: `${data?.id}`,
-      nomeServidor: `${data?.nomeServidor}`,
-      historySalary: {
-        valorVencimento: valorVencimento ? valorVencimento : dataR?.valorVencimento,
-        dataInicial: dataInicial ? dataInicial : dataR?.dataInicial,
-        dataFinal: dataInicial ? dataInicial : dataR?.dataFinal,
-      },
-    });
+    // await addDoc(collection(db, "history_salary"), {
+    //   id: `${data?.id}`,
+    //   nomeServidor: `${data?.nomeServidor}`,
+    //   historySalary: {
+    //     valorVencimento: valorVencimento ? valorVencimento : dataR?.valorVencimento,
+    //     dataInicial: dataInicial ? dataInicial : dataR?.dataInicial,
+    //     dataFinal: dataInicial ? dataInicial : dataR?.dataFinal,
+    //   },
+    // });
 
-    await addDoc(collection(db, "history_payment"), {
-      id: `${data?.id}`,
-      nomeServidor: `${data?.nomeServidor}`,
-      historyPayment: {
-        valorDesconto: valorDesconto ? valorDesconto : dataR?.valorDesconto,
-        formaPagamento: formaPagamento ? formaPagamento : dataR?.formaPagamento,
-        banco: banco ? banco : dataR?.banco,
-        agencia: agencia ? agencia : dataR?.agencia,
-        conta: conta ? conta : dataR?.conta,
-      }
-    });
+    // await addDoc(collection(db, "history_payment"), {
+    //   id: `${data?.id}`,
+    //   nomeServidor: `${data?.nomeServidor}`,
+    //   historyPayment: {
+    //     valorDesconto: valorDesconto ? valorDesconto : dataR?.valorDesconto,
+    //     formaPagamento: formaPagamento ? formaPagamento : dataR?.formaPagamento,
+    //     banco: banco ? banco : dataR?.banco,
+    //     agencia: agencia ? agencia : dataR?.agencia,
+    //     conta: conta ? conta : dataR?.conta,
+    //   }
+    // });
 
-    onRequestClose();
+    // onRequestClose();
+    console.log(data);
 
     // CADASTRO ASSSOCIADO
     setIDFuncional('');
@@ -213,7 +216,7 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
           <Input
             label="Nome Completo"
             placeholder="Nome Completo"
-            defaultValue={data?.nomeServidor}
+            defaultValue={data?.nomeServidor || nomeServidor}
             error={errors?.nomeServidor}
             {...register('nomeServidor')}
           />
@@ -221,14 +224,14 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
           <Input
             label="CPF"
             placeholder="CPF"
-            defaultValue={data?.cpf}
+            defaultValue={data?.cpf || cpf}
             error={errors?.cpf}
             {...register('cpf')}
           />
           <Input
             label="Data Assoc."
             placeholder="Data Assoc."
-            defaultValue={data?.dataAssoc}
+            defaultValue={data?.dataAssoc || dataAssoc}
             error={errors?.dataAssoc}
             {...register('dataAssoc')}
           />
@@ -354,7 +357,7 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
           />
         </Box>
 
-        <Divider mt="10" colorScheme="whiteAlpha" />
+        {/* <Divider mt="10" colorScheme="whiteAlpha" />
 
         <Heading w="100%" mt="7" mb="7">Histórico de Vencimentos</Heading>
 
@@ -452,7 +455,7 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
             error={errors?.conta}
             {...register('conta')}
           />
-        </Box>
+        </Box> */}
 
         <Box w="100%" mt="7" display="flex" justifyContent="flex-end">
           <Button
