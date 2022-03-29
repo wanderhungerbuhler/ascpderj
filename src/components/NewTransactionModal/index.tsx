@@ -106,7 +106,7 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
 
     const db = getFirestore(app);
 
-    await updateDoc(doc(db, "associates_homologacao", `${data?.id}`), {
+    await updateDoc(doc(db, "associates", `${data?.id}`), {
       idFuncional: idFuncional ? idFuncional : dataR?.idFuncional,
       nomeServidor: nomeServidor ? nomeServidor : dataR?.nomeServidor,
       cpf: cpf ? cpf : dataR?.cpf,

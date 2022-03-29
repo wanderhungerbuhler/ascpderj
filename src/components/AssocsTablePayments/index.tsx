@@ -73,7 +73,7 @@ export function AssocsTablePayments({ data }: DataProps) {
 
   async function handleDelete(d: OrderProps) {
     const db = getFirestore(app);
-    const deleteUsers = doc(db, "associates_homologacao", `${d.id}`);
+    const deleteUsers = doc(db, "associates", `${d.id}`);
 
     window.confirm("Deseja realmente excluir?") ? await deleteDoc(deleteUsers) : '';
   }
