@@ -103,34 +103,34 @@ export function AssocsTable({ data }: DataProps) {
             <Tbody>
 
               {data?.map(d => (
-                <Tr key={d.id}>
+                <Tr key={d?.id}>
                   <Td>
                     <Box>
-                      <Text fontSize="sm">{d.idFuncional}</Text>
+                      <Text fontSize="sm">{d?.idFuncional}</Text>
                     </Box>
                   </Td>
 
                   <Td>
                     <Box>
-                      <Text fontWeight="bold" fontSize="sm">{d.nomeServidor}</Text>
+                      <Text fontWeight="bold" fontSize="sm">{d?.nomeServidor}</Text>
                     </Box>
                   </Td>
 
                   <Td>
                     <Box>
-                      <Text fontSize="sm">{d.catAssoc}</Text>
+                      <Text fontSize="sm">{d?.catAssoc}</Text>
                     </Box>
                   </Td>
 
                   <Td>
                     <Box>
-                      <Text fontSize="sm">{d.cargo}</Text>
+                      <Text fontSize="sm">{d?.cargo}</Text>
                     </Box>
                   </Td>
 
                   <Td>
                     <Box>
-                      <Text fontSize="sm">{d.matricula}</Text>
+                      <Text fontSize="sm">{d?.matricula}</Text>
                     </Box>
                   </Td>
 

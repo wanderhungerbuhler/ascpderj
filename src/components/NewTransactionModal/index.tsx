@@ -13,6 +13,7 @@ import { RiSave2Fill } from "react-icons/ri";
 import { Box, Button, Divider, Flex, Heading, Select } from "@chakra-ui/react";
 
 import { AuthContext } from '@/hooks/authContext';
+import { useRouter } from "next/router";
 
 interface OrderProps {
   id: string;
@@ -63,7 +64,14 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
 
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(schemaRegister)
-  })
+  });
+
+  const router = useRouter();
+
+  function handleCancel() {
+    router.reload();
+    onRequestClose();
+  }
 
   // USER
   const [idFuncional, setIDFuncional] = useState('');
@@ -93,12 +101,11 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
   const [agencia, setAgencia] = useState('');
   const [conta, setConta] = useState('');
 
+
   const handleSubmitRegister: SubmitHandler<OrderProps | FieldValues> = async (dataR, event) => {
     event?.preventDefault();
 
     const db = getFirestore(app);
-
-    console.log(dataR)
 
     await updateDoc(doc(db, "associates", `${data?.id}`), {
       idFuncional: idFuncional ? idFuncional : dataR?.idFuncional,
@@ -150,7 +157,6 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
     //   }
     // });
 
-    onRequestClose();
 
     // CADASTRO ASSSOCIADO
     setIDFuncional('');
@@ -180,12 +186,14 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
     setFormaPagamento('');
     setAgencia('');
     setConta('');
+
+    onRequestClose();
   }
 
   return (
     <Modal
       isOpen={isOpen}
-      onRequestClose={onRequestClose}
+      onRequestClose={handleCancel}
       overlayClassName="react-modal-overlay"
       className="react-modal-content"
     >
@@ -466,7 +474,7 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
             bg="gray.500"
             cursor="pointer"
             outline="none"
-            onClick={onRequestClose}
+            onClick={handleCancel}
             _focus={{
               outline: "none",
             }}
