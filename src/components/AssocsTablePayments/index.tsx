@@ -43,18 +43,14 @@ interface OrderProps {
   valorVencimento?: string;
   dataInicial?: string;
   dataFinal?: string;
-  valorDesconto?: string;
-  formaPagamento?: string;
-  banco?: string;
-  agencia?: string;
-  conta?: string;
+  updated_at?: string;
 }
 
 interface DataProps {
   data: OrderProps[] | null;
 }
 
-export function AssocsTable({ data }: DataProps) {
+export function AssocsTablePayments({ data }: DataProps) {
   const [dd, setDD] = useState<OrderProps | null>(null);
   const [isNewTransactionModal, setIsNewTransactionModal] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -92,12 +88,10 @@ export function AssocsTable({ data }: DataProps) {
             <TableCaption placement="bottom">Relatório de Associados ASCPDERJ</TableCaption>
             <Thead>
               <Tr>
-                <Th>Id Funcional</Th>
-                <Th>Nome</Th>
-                <Th>Cat. Assoc.</Th>
-                <Th>Cargo</Th>
-                <Th>Matrícula</Th>
-                <Th></Th>
+                <Th>ID Func.</Th>
+                <Th>Vlr. Venc.</Th>
+                <Th>Dt. Inicial</Th>
+                <Th>Dt. Final</Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -112,88 +106,20 @@ export function AssocsTable({ data }: DataProps) {
 
                   <Td>
                     <Box>
-                      <Text fontWeight="bold" fontSize="sm">{d?.nomeServidor}</Text>
+                      <Text fontWeight="bold" fontSize="sm">R${d?.valorVencimento}</Text>
                     </Box>
                   </Td>
 
                   <Td>
                     <Box>
-                      <Text fontSize="sm">{d?.catAssoc}</Text>
+                      <Text fontSize="sm">{d?.dataInicial}</Text>
                     </Box>
                   </Td>
 
                   <Td>
                     <Box>
-                      <Text fontSize="sm">{d?.cargo}</Text>
+                      <Text fontSize="sm">{d?.dataFinal}</Text>
                     </Box>
-                  </Td>
-
-                  <Td>
-                    <Box>
-                      <Text fontSize="sm">{d?.matricula}</Text>
-                    </Box>
-                  </Td>
-
-                  <Td>
-                    <IconButton
-                      aria-label='Update Associates'
-                      as="button"
-                      size="xs"
-                      mr="1"
-                      fontSize="sm"
-                      bg="0"
-                      color="gray.50"
-                      icon={<RiPencilLine fontSize={17} />}
-                      cursor="pointer"
-                      outline="none"
-                      _focus={{
-                        outline: "none"
-                      }}
-                      _hover={{
-                        bg: "gray.700"
-                      }}
-                      onClick={() => handleOpenNewTransactionModal(d)}
-                    />
-
-                    <IconButton
-                      aria-label='Open PDF Associated'
-                      as="button"
-                      size="xs"
-                      mr="1"
-                      fontSize="sm"
-                      bg="0"
-                      color="gray.50"
-                      icon={<VscFilePdf fontSize={17} />}
-                      cursor="pointer"
-                      outline="none"
-                      _focus={{
-                        outline: "none"
-                      }}
-                      _hover={{
-                        bg: "gray.700"
-                      }}
-                      onClick={() => handleOpenPDF(d)}
-                    />
-
-                    <IconButton
-                      aria-label='Delete Associates'
-                      as="button"
-                      size="xs"
-                      mr="1"
-                      fontSize="sm"
-                      bg="0"
-                      color="red"
-                      icon={<RiDeleteBin7Line fontSize={17} />}
-                      cursor="pointer"
-                      outline="none"
-                      _focus={{
-                        outline: "none"
-                      }}
-                      _hover={{
-                        bg: "gray.700"
-                      }}
-                      onClick={() => handleDelete(d)}
-                    >Atualizar</IconButton>
                   </Td>
                 </Tr>
               ))}
