@@ -63,6 +63,7 @@ export default function Dashboard() {
           }
         })
         setResultSearch(data as any);
+        console.log(data);
       })
   }, [formatedSearch, listPageFilterSelected, listPageSearchSelected])
 

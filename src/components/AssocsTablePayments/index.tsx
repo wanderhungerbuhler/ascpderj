@@ -92,6 +92,7 @@ export function AssocsTablePayments({ data }: DataProps) {
                 <Th>Vlr. Venc.</Th>
                 <Th>Dt. Inicial</Th>
                 <Th>Dt. Final</Th>
+                <Th>Últ. Atualização</Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -121,6 +122,12 @@ export function AssocsTablePayments({ data }: DataProps) {
                       <Text fontSize="sm">{d?.dataFinal}</Text>
                     </Box>
                   </Td>
+
+                  <Td>
+                    <Box>
+                      <Text fontSize="sm">{d?.updated_at}</Text>
+                    </Box>
+                  </Td>
                 </Tr>
               ))}
 
@@ -131,5 +138,3 @@ export function AssocsTablePayments({ data }: DataProps) {
     </>
   )
 }
-
-
