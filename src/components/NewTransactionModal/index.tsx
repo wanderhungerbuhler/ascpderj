@@ -187,6 +187,7 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
     setConta('');
 
     onRequestClose();
+    handleCancel();
   }
 
   return (
