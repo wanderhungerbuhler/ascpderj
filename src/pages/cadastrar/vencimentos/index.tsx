@@ -24,9 +24,9 @@ interface OrderProps {
 const schemaRegister = Yup.object().shape({
   idFuncional: Yup.string().required('Preencher campo vazio: Apenas números são aceitos'),
   valorVencimento: Yup.string().required('Preencher campo vazio. Ex: 1,00').matches(/^\d+(?:\,\d{2,2})$/, "Coloque uma vírgula antes das 2 últimas casas decimais"),
-  dataInicial: Yup.date().required('Preencher campo vazio').nullable(),
-  dataFinal: Yup.date()
-    .min(Yup.ref('dataInicial'), "A Data Final não pode ser inferior a Data de Início")
+  dataInicial: Yup.date().typeError("Preencha o campo vazio").required('Preencher campo vazio').nullable(),
+  dataFinal: Yup.date().typeError("Preencha o campo vazio - Lembre-se: A Data Final não pode ser inferior a Data Inicial")
+    .min(Yup.ref('dataInicial'), "A Data Final não pode ser inferior a Data Inicial")
     .required('Preencher campo vazio')
     .nullable()
 });
