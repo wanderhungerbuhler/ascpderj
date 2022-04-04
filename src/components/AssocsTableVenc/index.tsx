@@ -40,11 +40,9 @@ interface OrderProps {
   municipio: string;
   cep: string;
 
-  valorDesconto?: string;
-  formaPagamento?: string;
-  banco?: string;
-  agencia?: string;
-  conta?: string;
+  valorVencimento?: string;
+  dataInicial?: string;
+  dataFinal?: string;
   updated_at?: string;
 }
 
@@ -52,7 +50,7 @@ interface DataProps {
   data: OrderProps[] | null;
 }
 
-export function AssocsTablePayments({ data }: DataProps) {
+export function AssocsTableVenc({ data }: DataProps) {
   const [dd, setDD] = useState<OrderProps | null>(null);
   const [isNewTransactionModal, setIsNewTransactionModal] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -91,11 +89,9 @@ export function AssocsTablePayments({ data }: DataProps) {
             <Thead>
               <Tr>
                 <Th>ID Func.</Th>
-                <Th>Vlr. Desc.</Th>
-                <Th>Form. Pag.</Th>
-                <Th>Banco</Th>
-                <Th>Agência</Th>
-                <Th>Conta</Th>
+                <Th>Vlr. Venc.</Th>
+                <Th>Dt. Inicial</Th>
+                <Th>Dt. Final</Th>
                 <Th>Últ. Atualização</Th>
               </Tr>
             </Thead>
@@ -111,31 +107,19 @@ export function AssocsTablePayments({ data }: DataProps) {
 
                   <Td>
                     <Box>
-                      <Text fontWeight="bold" fontSize="sm">R${d?.valorDesconto}</Text>
+                      <Text fontWeight="bold" fontSize="sm">R${d?.valorVencimento}</Text>
                     </Box>
                   </Td>
 
                   <Td>
                     <Box>
-                      <Text fontSize="sm">{d?.formaPagamento}</Text>
+                      <Text fontSize="sm">{d?.dataInicial}</Text>
                     </Box>
                   </Td>
 
                   <Td>
                     <Box>
-                      <Text fontSize="sm">{d?.banco}</Text>
-                    </Box>
-                  </Td>
-
-                  <Td>
-                    <Box>
-                      <Text fontSize="sm">{d?.agencia}</Text>
-                    </Box>
-                  </Td>
-
-                  <Td>
-                    <Box>
-                      <Text fontSize="sm">{d?.conta}</Text>
+                      <Text fontSize="sm">{d?.dataFinal}</Text>
                     </Box>
                   </Td>
 

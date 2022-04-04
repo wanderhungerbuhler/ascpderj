@@ -38,7 +38,7 @@ export default function Sidebar() {
               </ChrackraLink>
             </ActiveLink>
 
-            <ActiveLink href="#" passHref>
+            <ActiveLink href="/cadastrar/pagamentos" passHref>
               <ChrackraLink display="flex" alignItems="center">
                 <Icon as={RiMoneyDollarBoxLine} fontSize="20" />
                 <Text ml="4" fontWeight="medium">Pagamentos</Text>
@@ -57,7 +57,7 @@ export default function Sidebar() {
               </ChrackraLink>
             </ActiveLink>
 
-            <ActiveLink href="#" passHref>
+            <ActiveLink href="/historico/pagamentos" passHref>
               <ChrackraLink display="flex" alignItems="center">
                 <Icon as={RiMoneyDollarBoxLine} fontSize="20" />
                 <Text ml="4" fontWeight="medium">Pagamentos</Text>

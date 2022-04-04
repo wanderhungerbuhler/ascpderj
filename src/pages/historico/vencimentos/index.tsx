@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { RiContactsLine, RiDashboard2Line, RiMoneyDollarBoxLine, RiSearchLine } from 'react-icons/ri';
 
 import { Header } from '@/components/Header';
-import { AssocsTablePayments } from '@/components/AssocsTablePayments';
+import { AssocsTableVenc } from '@/components/AssocsTableVenc';
 import { AuthContext } from '@/hooks/authContext';
 
 import app from '../../../../services/firebaseConfig';
@@ -122,7 +122,7 @@ export default function Vencimentos() {
 
       <Flex w="100%" my="6" maxWidth={1280} mx="auto">
         <Sidebar />
-        {user && <AssocsTablePayments data={!resultSearch ? tV : resultSearch} />}
+        {user && <AssocsTableVenc data={!resultSearch ? tV : resultSearch} />}
       </Flex>
 
     </>
