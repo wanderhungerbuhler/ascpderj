@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { deleteDoc, doc, getFirestore } from 'firebase/firestore';
 
 import { Flex, IconButton } from '@chakra-ui/react';
@@ -77,7 +77,7 @@ export function AssocsTable({ data }: DataProps) {
 
   async function handleDelete(d: OrderProps) {
     const db = getFirestore(app);
-    const deleteUsers = doc(db, "associates", `${d.id}`);
+    const deleteUsers = doc(db, `${process.env.NEXT_PUBLIC_FIREBASEDB}`, `${d.id}`);
 
     window.confirm("Deseja realmente excluir?") ? await deleteDoc(deleteUsers) : '';
   }

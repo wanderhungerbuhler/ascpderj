@@ -50,11 +50,9 @@ export default function Dashboard() {
 
   const [listPageFilterSelected, setListPageFilterSelected] = useState('nomeServidor');
 
-  console.log(listPageFilterSelected);
-
   useEffect(() => {
     const db = getFirestore(app);
-    onSnapshot(query(collection(db, "associates"), where(`${listPageFilterSelected}`, ">=", `${formatedSearch}`),
+    onSnapshot(query(collection(db, `${process.env.NEXT_PUBLIC_FIREBASEDB}`), where(`${listPageFilterSelected}`, ">=", `${formatedSearch}`),
       orderBy(`${listPageFilterSelected}`, "asc"), startAt(formatedSearch), endAt(`${formatedSearch}\uf8ff`), limit(listPageSearchSelected)), snap => {
         const data = snap.docs.map(doc => {
           return {

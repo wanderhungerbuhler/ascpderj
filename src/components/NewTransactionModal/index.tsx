@@ -1,6 +1,6 @@
-import React, { FormEvent, useContext, useState } from "react";
+import React, { FormEvent, useContext, useEffect, useState } from "react";
 import app from "@/../services/firebaseConfig";
-import { addDoc, collection, doc, getFirestore, setDoc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDocs, getFirestore, query, setDoc, updateDoc } from "firebase/firestore";
 
 import * as Yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -13,7 +13,6 @@ import { RiSave2Fill } from "react-icons/ri";
 import { Box, Button, Divider, Flex, Heading, Select } from "@chakra-ui/react";
 
 import { AuthContext } from '@/hooks/authContext';
-import { useRouter } from "next/router";
 
 interface OrderProps {
   id: string;
@@ -48,30 +47,38 @@ interface NewTransactionModalProps {
   data: OrderProps | null;
 }
 
-const schemaRegister = Yup.object().shape({
-  // valorVencimento: Yup.string().required('Preencher campo vazio'),
-  // dataInicial: Yup.string().required('Preencher campo vazio'),
-  // dataFinal: Yup.string().required('Preencher campo vazio'),
+interface CargosProps {
+  nomeCargo: string;
+}
 
-  // valorDesconto: Yup.string().required('Preencher campo vazio'),
-  // banco: Yup.string().required('Preencher campo vazio'),
-  // agencia: Yup.string().required('Preencher campo vazio'),
-  // conta: Yup.string().required('Preencher campo vazio'),
-});
+const schemaRegister = Yup.object().shape({});
 
 export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransactionModalProps) {
   const { user } = useContext(AuthContext);
 
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const { register, handleSubmit, formState: { errors }, reset } = useForm({
     resolver: yupResolver(schemaRegister)
   });
 
-  const router = useRouter();
+  const [cargos, setCargos] = useState<CargosProps[] | null>(null);
 
-  function handleCancel() {
-    router.reload();
-    onRequestClose();
-  }
+  useEffect(() => {
+    async function getCargos() {
+
+      const db = getFirestore(app);
+      await getDocs(query(collection(db, "cargos"))).then(response => {
+        const data = response.docs.map(doc => {
+          return {
+            id: doc.id,
+            ...doc.data(),
+          }
+        })
+        setCargos(data as any);
+      });
+    }
+
+    getCargos();
+  }, [])
 
   // USER
   const [idFuncional, setIDFuncional] = useState('');
@@ -106,7 +113,7 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
 
     const db = getFirestore(app);
 
-    await updateDoc(doc(db, "associates", `${data?.id}`), {
+    await updateDoc(doc(db, `${process.env.NEXT_PUBLIC_FIREBASEDB}`, `${data?.id}`), {
       idFuncional: idFuncional ? idFuncional : dataR?.idFuncional,
       nomeServidor: nomeServidor ? nomeServidor : dataR?.nomeServidor,
       cpf: cpf ? cpf : dataR?.cpf,
@@ -157,43 +164,44 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
     // });
 
 
-    // CADASTRO ASSSOCIADO
-    setIDFuncional('');
-    setNomeServidor('');
-    setCpf('');
-    setDataAssoc('');
-    setCatAssoc('');
-    setMatricula('');
-    setCondicao('');
-    setCargo('');
-    setEmail('');
-    setEndereco('');
-    setTelefone('');
-    setBairro('');
-    setMunicipio('');
-    setCep('');
+    // // CADASTRO ASSSOCIADO
+    // setIDFuncional('');
+    // setNomeServidor('');
+    // setCpf('');
+    // setDataAssoc('');
+    // setCatAssoc('');
+    // setMatricula('');
+    // setCondicao('');
+    // setCargo('');
+    // setEmail('');
+    // setEndereco('');
+    // setTelefone('');
+    // setBairro('');
+    // setMunicipio('');
+    // setCep('');
 
 
-    // HISTORY SALARY
-    setValorVencimento('');
-    setDataInicial('');
-    setDataFinal('');
+    // // HISTORY SALARY
+    // setValorVencimento('');
+    // setDataInicial('');
+    // setDataFinal('');
 
-    // HISTORY PAYMENT
-    setValorDesconto('');
-    setBanco('');
-    setFormaPagamento('');
-    setAgencia('');
-    setConta('');
+    // // HISTORY PAYMENT
+    // setValorDesconto('');
+    // setBanco('');
+    // setFormaPagamento('');
+    // setAgencia('');
+    // setConta('');
 
     onRequestClose();
-    handleCancel();
+    // handleCancel();
+    reset();
   }
 
   return (
     <Modal
       isOpen={isOpen}
-      onRequestClose={handleCancel}
+      onRequestClose={onRequestClose}
       overlayClassName="react-modal-overlay"
       className="react-modal-content"
     >
@@ -311,10 +319,14 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
             {...register('cargo')}
           >
             <option style={{ background: '#181B23', color: '#FFFFFF' }} disabled selected defaultValue={data?.cargo}>{data?.cargo}</option>
+            {cargos?.map(cargo => (
+              <option key={cargo?.nomeCargo} style={{ background: '#181B23', color: '#FFFFFF' }} defaultValue={data?.cargo}>{cargo?.nomeCargo}</option>
+            ))}
+            {/* <option style={{ background: '#181B23', color: '#FFFFFF' }} disabled selected defaultValue={data?.cargo}>{data?.cargo}</option>
             <option style={{ background: '#181B23', color: '#FFFFFF' }} value="Analista de Sistemas">Analista de Sistemas</option>
             <option style={{ background: '#181B23', color: '#FFFFFF' }} value="Assistente Administrativo">Assistente Administrativo</option>
             <option style={{ background: '#181B23', color: '#FFFFFF' }} value="Programador de Produção, Computação e Desenvolvimento">Programador de Produção, Computação e Desenvolvimento</option>
-            <option style={{ background: '#181B23', color: '#FFFFFF' }} value="Técnico de Suporte, Computação e Processamento">Técnico de Suporte, Computação e Processamento</option>
+            <option style={{ background: '#181B23', color: '#FFFFFF' }} value="Técnico de Suporte, Computação e Processamento">Técnico de Suporte, Computação e Processamento</option> */}
           </Select>
 
           <Input
@@ -473,7 +485,7 @@ export function NewTransactionModal({ data, isOpen, onRequestClose }: NewTransac
             bg="gray.500"
             cursor="pointer"
             outline="none"
-            onClick={handleCancel}
+            onClick={onRequestClose}
             _focus={{
               outline: "none",
             }}

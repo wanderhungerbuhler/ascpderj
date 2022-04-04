@@ -43,7 +43,7 @@ export default function CadastrarVencimentos(data: OrderProps) {
   async function handleUserExists(e: OrderProps) {
     const db = getFirestore(app);
 
-    const response = await getDocs(query(collection(db, "associates"), where("idFuncional", "==", `${String(e)}`)))
+    const response = await getDocs(query(collection(db, `${process.env.NEXT_PUBLIC_FIREBASEDB}`), where("idFuncional", "==", `${String(e)}`)))
     const users = response.docs.map(doc => {
       return {
         id: doc.id,

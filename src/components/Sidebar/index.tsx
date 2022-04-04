@@ -23,6 +23,14 @@ export default function Sidebar() {
         <Box>
           <Text fontWeight="bold" color="gray.400" fontSize="small">CADASTRAR</Text>
           <Stack spacing="4" mt="8" align="stretch">
+
+            <ActiveLink href="/cadastrar/cargos" passHref>
+              <ChrackraLink display="flex" alignItems="center">
+                <Icon as={RiMoneyDollarBoxLine} fontSize="20" />
+                <Text ml="4" fontWeight="medium">Cargos</Text>
+              </ChrackraLink>
+            </ActiveLink>
+
             <ActiveLink href="/cadastrar/vencimentos" passHref>
               <ChrackraLink display="flex" alignItems="center">
                 <Icon as={RiMoneyDollarBoxLine} fontSize="20" />
