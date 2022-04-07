@@ -7,13 +7,23 @@ interface InputProps extends ChackraInputProps {
   name: string;
   label?: string;
   error?: FieldError;
+  decimalsLimit?: number;
+  decimalScale?: number;
 }
 
-const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = ({ name, label, error = null, ...rest }, ref) => {
+import CurrencyInput from 'react-currency-input-field';
+
+const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = ({ name, label, decimalsLimit, decimalScale, error = null, ...rest }, ref) => {
   return (
     <FormControl isInvalid={!!error}>
       {!!label && <FormLabel htmlFor={name} mt="2" color="gray.500">{label}</FormLabel>}
       <ChackraInput
+        as={CurrencyInput}
+        decimalSeparator=","
+        groupSeparator="."
+        decimalsLimit={decimalsLimit}
+        decimalScale={decimalScale}
+        // intlConfig={{ locale: 'pt-BR', currency: 'BRL' }}
         borderWidth={.1}
         name={name}
         id={name}
@@ -37,4 +47,4 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = ({ nam
   );
 }
 
-export const Input = forwardRef(InputBase);
+export const InputCurrency = forwardRef(InputBase);

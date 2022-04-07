@@ -11,11 +11,14 @@ import { addDoc, collection, doc, getDoc, getDocs, getFirestore, onSnapshot, que
 import app from '@/../services/firebaseConfig';
 import { RiSave2Fill } from 'react-icons/ri';
 
+import { InputCurrency } from '@/components/Form/InputCurrency';
+
 interface OrderProps {
   id: string;
   idFuncional: string;
   nomeServidor: string;
 
+  porcentagemDesconto?: string;
   valorDesconto?: string;
   formaPagamento?: string;
   banco?: string;
@@ -25,7 +28,7 @@ interface OrderProps {
 
 const schemaRegister = Yup.object().shape({
   idFuncional: Yup.string().required('Preencher campo vazio: Apenas números são aceitos'),
-  valorDesconto: Yup.string().required('Preencher campo vazio. Ex: 1,00').matches(/^\d+(?:\,\d{2,2})$/, "Coloque uma vírgula antes das 2 últimas casas decimais"),
+  valorDesconto: Yup.string().optional(),
   formaPagamento: Yup.string().required('Preencher campo vazio.'),
   banco: Yup.string().required('Preencher campo vazio. Ex: Banco Bradesco'),
   agencia: Yup.string().required('Preencher campo vazio.'),
@@ -58,11 +61,20 @@ export default function CadastrarPagamentos(data: OrderProps) {
   const handleSubmitRegister: SubmitHandler<OrderProps | FieldValues> = async (form, event) => {
     event?.preventDefault();
 
+    const valorVencimento = 5000;
+    const valorDesconto = parseFloat(form?.valorDesconto);
+
+    const desconto = (valorVencimento / 100) * valorDesconto;
+
+    const newDesconto = valorVencimento - desconto;
+
     const db = getFirestore(app);
 
     await addDoc(collection(db, "history_payments"), {
       idFuncional: `${form?.idFuncional}`,
-      valorDesconto: form?.valorDesconto,
+      nomeServidor: form?.nomeServidor,
+      porcentagemDesconto: form?.valorDesconto,
+      valorDesconto: newDesconto,
       formaPagamento: form?.formaPagamento,
       banco: form?.banco,
       agencia: form?.agencia,
@@ -107,17 +119,17 @@ export default function CadastrarPagamentos(data: OrderProps) {
             <Input
               w="90%"
               label="Nome do Servidor"
-              disabled
               placeholder="Nome do Servidor"
-              value={userExists?.nomeServidor ? userExists?.nomeServidor : 'Não existe Servidor com o ID Funcional informado'}
+              value={userExists?.nomeServidor}
               type="text"
               {...register('nomeServidor')}
             />
 
-            <Input
+            <InputCurrency
               w="90%"
               label="Valor do Desconto (%)"
               placeholder="Valor do Desconto (%)"
+              decimalScale={1}
               error={errors?.valorVencimento}
               {...register('valorDesconto')}
             />

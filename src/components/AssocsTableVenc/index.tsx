@@ -40,6 +40,7 @@ interface OrderProps {
   municipio: string;
   cep: string;
 
+  valorDesconto?: string;
   valorVencimento?: string;
   dataInicial?: string;
   dataFinal?: string;

@@ -40,6 +40,7 @@ interface OrderProps {
   municipio: string;
   cep: string;
 
+  porcentagemDesconto?: string;
   valorDesconto?: string;
   formaPagamento?: string;
   banco?: string;
@@ -91,6 +92,7 @@ export function AssocsTablePayments({ data }: DataProps) {
             <Thead>
               <Tr>
                 <Th>ID Func.</Th>
+                <Th>(%)</Th>
                 <Th>Vlr. Desc.</Th>
                 <Th>Form. Pag.</Th>
                 <Th>Banco</Th>
@@ -106,6 +108,12 @@ export function AssocsTablePayments({ data }: DataProps) {
                   <Td>
                     <Box>
                       <Text fontSize="sm">{d?.idFuncional}</Text>
+                    </Box>
+                  </Td>
+
+                  <Td>
+                    <Box>
+                      <Text fontWeight="bold" fontSize="sm">{d?.porcentagemDesconto}</Text>
                     </Box>
                   </Td>
 

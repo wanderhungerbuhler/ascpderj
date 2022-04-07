@@ -5,6 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 
 import { Input } from '@/components/Form/Input';
+import { InputCurrency } from '@/components/Form/InputCurrency';
 import { Header } from '@/components/Header';
 import Sidebar from '@/components/Sidebar';
 import { addDoc, collection, doc, getDoc, getDocs, getFirestore, onSnapshot, query, serverTimestamp, where } from 'firebase/firestore';
@@ -23,16 +24,15 @@ interface OrderProps {
 
 const schemaRegister = Yup.object().shape({
   idFuncional: Yup.string().required('Preencher campo vazio: Apenas números são aceitos'),
-  valorVencimento: Yup.string().required('Preencher campo vazio. Ex: 1,00').matches(/^\d+(?:\,\d{2,2})$/, "Coloque uma vírgula antes das 2 últimas casas decimais"),
-  dataInicial: Yup.date().typeError("Preencha o campo vazio").required('Preencher campo vazio').nullable(),
+  valorVencimento: Yup.string().optional(),
+  dataInicial: Yup.date().typeError("Preencha o campo vazio").optional().nullable(),
   dataFinal: Yup.date().typeError("Preencha o campo vazio - Lembre-se: A Data Final não pode ser inferior a Data Inicial")
     .min(Yup.ref('dataInicial'), "A Data Final não pode ser inferior a Data Inicial")
-    .required('Preencher campo vazio')
-    .nullable()
+    .optional()
 });
 
 export default function CadastrarVencimentos(data: OrderProps) {
-  const { register, handleSubmit, formState, reset } = useForm({
+  const { register, handleSubmit, formState, reset, resetField } = useForm({
     resolver: yupResolver(schemaRegister)
   });
 
@@ -57,10 +57,13 @@ export default function CadastrarVencimentos(data: OrderProps) {
   const handleSubmitRegister: SubmitHandler<OrderProps | FieldValues> = async (form, event) => {
     event?.preventDefault();
 
+    resetField('nomeServidor');
+
     const db = getFirestore(app);
 
     await addDoc(collection(db, "history_salary"), {
       idFuncional: form?.idFuncional,
+      nomeServidor: form?.nomeServidor,
       valorVencimento: form?.valorVencimento,
       dataInicial: form?.dataInicial.toLocaleString('pt-BR', {
         day: '2-digit',
@@ -83,6 +86,7 @@ export default function CadastrarVencimentos(data: OrderProps) {
     });
 
     alert('Cadastrado com sucesso!');
+    resetField('nomeServidor');
     reset();
   }
 
@@ -112,20 +116,22 @@ export default function CadastrarVencimentos(data: OrderProps) {
             <Input
               w="90%"
               label="Nome do Servidor"
-              disabled
               placeholder="Nome do Servidor"
-              value={userExists?.nomeServidor ? userExists?.nomeServidor : 'Não existe Servidor com o ID Funcional informado'}
+              value={userExists?.nomeServidor}
               type="text"
               {...register('nomeServidor')}
             />
 
-            <Input
+            <InputCurrency
               w="90%"
               label="Valor do Vencimento (R$)"
               placeholder="Valor do Vencimento (R$)"
+              decimalsLimit={1}
+              decimalScale={2}
               error={errors?.valorVencimento}
               {...register('valorVencimento')}
             />
+
 
             <Input
               w="90%"
